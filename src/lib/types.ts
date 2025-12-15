@@ -21,7 +21,7 @@ export interface TranslatedFinding {
   plainLanguage: string;
   context: string;
   commonApproaches?: string[];
-  severityLevel: 'low' | 'medium' | 'high' | 'critical';
+  importance: 'fyi' | 'note' | 'explore' | 'important';
   reflection: string;
   staticAnalysisNote?: string;
 }
