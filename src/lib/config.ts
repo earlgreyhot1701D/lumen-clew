@@ -55,4 +55,7 @@ export const CONFIG = {
   // Rate limiting
   MAX_SCANS_PER_DAY: 3,
   RATE_LIMIT_RESET_HOUR_UTC: 0,
+
+  // Findings limits (for Claude translation batching)
+  MAX_FINDINGS_PER_PANEL: 25,
 } as const;
