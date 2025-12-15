@@ -1,167 +1,86 @@
-// Lumen Clew - TypeScript Type Definitions
-// Shared types used by both frontend and backend
+// Lumen Clew - Type Definitions
+// Matches BACKEND_INTEGRATION_SPEC exactly
 
-// ─────────────────────────────────────────────────────────────
-// Scan Request & Response
-// ─────────────────────────────────────────────────────────────
-
-export interface ScanRequest {
-  repoUrl: string;
-  targetLanguage: string;
-}
-
-export interface ScanResponse {
-  success: boolean;
-  data?: ScanResult;
-  error?: string;
-}
-
-// ─────────────────────────────────────────────────────────────
-// Scan Results
-// ─────────────────────────────────────────────────────────────
-
-export interface ScanResult {
-  repoUrl: string;
-  scannedAt: string;
-  tools: ToolResults;
-  summary: ScanSummary;
-}
-
-export interface ToolResults {
-  eslint: ESLintResult;
-  npmAudit: NpmAuditResult;
-  secrets: SecretsResult;
-  a11y: A11yResult;
-  translation: TranslationResult;
-}
-
-export interface ScanSummary {
-  totalIssues: number;
-  criticalCount: number;
-  warningCount: number;
-  infoCount: number;
-}
-
-// ─────────────────────────────────────────────────────────────
-// ESLint Tool
-// ─────────────────────────────────────────────────────────────
-
-export interface ESLintResult {
-  success: boolean;
-  issues: ESLintIssue[];
-  errorCount: number;
-  warningCount: number;
-}
-
-export interface ESLintIssue {
-  file: string;
-  line: number;
-  column: number;
-  severity: 'error' | 'warning';
+// Raw finding from a tool (before LLM translation)
+export interface RawFinding {
+  id: string;
+  panel: 'code_quality' | 'dependencies' | 'secrets' | 'accessibility';
+  tool: 'eslint' | 'npm_audit' | 'secrets_regex' | 'a11y_analyzer';
+  severity: 'low' | 'medium' | 'high' | 'critical';
   message: string;
-  ruleId: string | null;
+  file?: string;
+  line?: number;
+  column?: number;
+  metadata?: Record<string, unknown>;
 }
 
-// ─────────────────────────────────────────────────────────────
-// npm audit Tool
-// ─────────────────────────────────────────────────────────────
-
-export interface NpmAuditResult {
-  success: boolean;
-  vulnerabilities: NpmVulnerability[];
-  summary: {
-    total: number;
-    critical: number;
-    high: number;
-    moderate: number;
-    low: number;
-  };
+// Translated finding (after LLM)
+export interface TranslatedFinding {
+  id: string;
+  panel: 'code_quality' | 'dependencies' | 'secrets' | 'accessibility';
+  plainLanguage: string;
+  context: string;
+  commonApproaches?: string[];
+  severityLevel: 'low' | 'medium' | 'high' | 'critical';
+  reflection: string;
+  staticAnalysisNote?: string;
 }
 
-export interface NpmVulnerability {
-  name: string;
-  severity: 'critical' | 'high' | 'moderate' | 'low';
-  title: string;
-  url: string;
-  fixAvailable: boolean;
+// Panel result
+export interface PanelResult {
+  panel: 'code_quality' | 'dependencies' | 'secrets' | 'accessibility';
+  status: 'success' | 'partial' | 'skipped';
+  findingCount: number;
+  findings: TranslatedFinding[];
+  statusReason?: 'timeout' | 'tool_error' | 'missing_manifest' | 'translation_error' | 'file_cap_hit';
+  errorMessage?: string;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Secrets Scanner Tool
-// ─────────────────────────────────────────────────────────────
-
-export interface SecretsResult {
-  success: boolean;
-  findings: SecretFinding[];
+// Scan scope
+export interface ScanScope {
+  maxFilesAllowed: number;
+  maxFileSizeMb: number;
+  ignoredDirectories: string[];
+  filesCounted: number;
   filesScanned: number;
+  filesSkipped: number;
 }
 
-export interface SecretFinding {
-  file: string;
-  line: number;
-  type: string;
-  description: string;
-  severity: 'critical' | 'high' | 'medium';
-}
-
-// ─────────────────────────────────────────────────────────────
-// Accessibility Analyzer Tool
-// ─────────────────────────────────────────────────────────────
-
-export interface A11yResult {
-  success: boolean;
-  issues: A11yIssue[];
-  filesAnalyzed: number;
-}
-
-export interface A11yIssue {
-  file: string;
-  line: number;
-  element: string;
-  issue: string;
-  impact: 'critical' | 'serious' | 'moderate' | 'minor';
-  suggestion: string;
-}
-
-// ─────────────────────────────────────────────────────────────
-// Claude Translation Tool
-// ─────────────────────────────────────────────────────────────
-
-export interface TranslationResult {
-  success: boolean;
-  targetLanguage: string;
-  translations: TranslationEntry[];
-  stringsFound: number;
-  stringsTranslated: number;
-}
-
-export interface TranslationEntry {
-  file: string;
-  original: string;
-  translated: string;
-  context?: string;
-}
-
-// ─────────────────────────────────────────────────────────────
-// Progress Tracking
-// ─────────────────────────────────────────────────────────────
-
-export type ToolName = 'clone' | 'eslint' | 'npmAudit' | 'secrets' | 'a11y' | 'translation';
-
-export type ToolStatus = 'pending' | 'running' | 'completed' | 'failed';
-
-export interface ToolProgress {
-  tool: ToolName;
-  status: ToolStatus;
-  message?: string;
-  startedAt?: string;
-  completedAt?: string;
-}
-
-export interface ScanProgress {
-  scanId: string;
+// Complete report
+export interface ScanReport {
+  id: string;
   repoUrl: string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
-  tools: ToolProgress[];
-  currentTool?: ToolName;
+  scanMode: 'fast' | 'full';
+  status: 'success' | 'partial' | 'error';
+  partialReasons?: string[];
+  scanScope: ScanScope;
+  panels: {
+    codeQuality: PanelResult;
+    dependencies: PanelResult;
+    secrets: PanelResult;
+    accessibility: PanelResult;
+  };
+  orientationNote: string;
+  clonedAt: string;
+  scanDuration: number;
+}
+
+// Rate limit state
+export interface RateLimitState {
+  scansToday: number;
+  maxScansPerDay: number;
+  resetTime: string;
+  remaining: number;
+  canScan: boolean;
+}
+
+// API response envelope
+export interface ApiScanResponse {
+  status: 'success' | 'partial' | 'error';
+  report?: ScanReport;
+  error?: {
+    code: 'INVALID_GITHUB_URL' | 'RATE_LIMIT_EXCEEDED' | 'REPO_NOT_FOUND' | 'CLONE_TIMEOUT' | string;
+    message: string;
+  };
+  rateLimit: RateLimitState;
 }

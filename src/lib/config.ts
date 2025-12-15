@@ -1,64 +1,58 @@
 // Lumen Clew - Configuration Constants
-// Shared configuration used by both frontend and backend
+// Matches BACKEND_INTEGRATION_SPEC exactly
 
-// ─────────────────────────────────────────────────────────────
-// API Configuration
-// ─────────────────────────────────────────────────────────────
+export const CONFIG = {
+  // API
+  API_BASE_URL: 'https://lumen-clew-backend.onrender.com',
+  API_SCAN_ENDPOINT: 'https://lumen-clew-backend.onrender.com/api/scan',
 
-export const API_BASE_URL = 'https://lumen-clew-backend.onrender.com';
-export const API_SCAN_ENDPOINT = `${API_BASE_URL}/api/scan`;
+  // Claude
+  CLAUDE_MODEL: 'claude-sonnet-4-5-20250929',
+  CLAUDE_MAX_TOKENS: 1000,
+  CLAUDE_TEMPERATURE: 0.7,
 
-// ─────────────────────────────────────────────────────────────
-// Claude Configuration
-// ─────────────────────────────────────────────────────────────
+  // GitHub
+  GITHUB_URL_PATTERN: /^https:\/\/github\.com\/[a-zA-Z0-9_-]+\/[a-zA-Z0-9_.-]+\/?$/,
 
-export const CLAUDE_MODEL = 'claude-sonnet-4-5-20250929';
-export const CLAUDE_MAX_TOKENS = 4096;
+  // Repo limits
+  MAX_REPO_SIZE_MB_FOR_FULL_SCAN: 100,
+  MAX_FILE_SIZE_MB: 1,
+  ALLOWED_FILE_TYPES: ['.js', '.jsx', '.ts', '.tsx'],
+  FILES_TO_IGNORE: [
+    'node_modules/',
+    'dist/',
+    'build/',
+    '.next/',
+    'coverage/',
+    '.git/',
+    '.venv/',
+    '__pycache__/',
+    'vendor/',
+    'target/'
+  ],
 
-// ─────────────────────────────────────────────────────────────
-// GitHub Configuration
-// ─────────────────────────────────────────────────────────────
+  // Scan modes
+  FAST_SCAN: {
+    maxFiles: 300,
+    cloneDepth: 1,
+    totalTimeoutMs: 90000,
+    eslintTimeoutMs: 20000,
+    npmAuditTimeoutMs: 15000,
+    secretsScanTimeoutMs: 10000,
+    a11yTimeoutMs: 20000,
+  },
 
-export const GITHUB_URL_PATTERN = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/?$/;
+  FULL_SCAN: {
+    maxFiles: 999999,
+    cloneDepth: 1,
+    totalTimeoutMs: 180000,
+    eslintTimeoutMs: 45000,
+    npmAuditTimeoutMs: 30000,
+    secretsScanTimeoutMs: 30000,
+    a11yTimeoutMs: 45000,
+  },
 
-// ─────────────────────────────────────────────────────────────
-// Supported Languages for Translation
-// ─────────────────────────────────────────────────────────────
-
-export const SUPPORTED_LANGUAGES = [
-  { code: 'es', name: 'Spanish' },
-  { code: 'fr', name: 'French' },
-  { code: 'de', name: 'German' },
-  { code: 'pt', name: 'Portuguese' },
-  { code: 'it', name: 'Italian' },
-  { code: 'ja', name: 'Japanese' },
-  { code: 'ko', name: 'Korean' },
-  { code: 'zh', name: 'Chinese' },
-  { code: 'ar', name: 'Arabic' },
-  { code: 'hi', name: 'Hindi' },
-] as const;
-
-export type LanguageCode = typeof SUPPORTED_LANGUAGES[number]['code'];
-
-// ─────────────────────────────────────────────────────────────
-// Tool Configuration
-// ─────────────────────────────────────────────────────────────
-
-export const TOOL_NAMES = ['clone', 'eslint', 'npmAudit', 'secrets', 'a11y', 'translation'] as const;
-
-export const TOOL_DISPLAY_NAMES: Record<typeof TOOL_NAMES[number], string> = {
-  clone: 'Clone Repository',
-  eslint: 'ESLint Analysis',
-  npmAudit: 'npm Audit',
-  secrets: 'Secrets Scanner',
-  a11y: 'Accessibility Check',
-  translation: 'Translation',
-};
-
-// ─────────────────────────────────────────────────────────────
-// Timeouts (in milliseconds)
-// ─────────────────────────────────────────────────────────────
-
-export const CLONE_TIMEOUT_MS = 60000; // 1 minute
-export const TOOL_TIMEOUT_MS = 120000; // 2 minutes per tool
-export const TOTAL_SCAN_TIMEOUT_MS = 600000; // 10 minutes total
+  // Rate limiting
+  MAX_SCANS_PER_DAY: 3,
+  RATE_LIMIT_RESET_HOUR_UTC: 0,
+} as const;
