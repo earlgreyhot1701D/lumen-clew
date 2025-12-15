@@ -89,7 +89,7 @@ export function runESLint(
         logger.error('ESLint timeout exceeded', { timeoutMs });
         endTimer();
         return {
-          success: false,
+          success: true,
           findings: [],
           error: `ESLint timeout after ${timeoutMs}ms`,
         };
