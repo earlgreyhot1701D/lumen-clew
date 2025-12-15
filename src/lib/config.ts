@@ -40,6 +40,7 @@ export const CONFIG = {
     npmAuditTimeoutMs: 15000,
     secretsScanTimeoutMs: 10000,
     a11yTimeoutMs: 20000,
+    claudeTranslationTimeoutMs: 20000,
   },
 
   FULL_SCAN: {
@@ -50,6 +51,7 @@ export const CONFIG = {
     npmAuditTimeoutMs: 30000,
     secretsScanTimeoutMs: 30000,
     a11yTimeoutMs: 45000,
+    claudeTranslationTimeoutMs: 20000,
   },
 
   // Rate limiting

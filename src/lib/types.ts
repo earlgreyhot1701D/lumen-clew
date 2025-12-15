@@ -26,6 +26,17 @@ export interface TranslatedFinding {
   staticAnalysisNote?: string;
 }
 
+// Panel translation result (from Claude translator)
+export interface PanelTranslationResult {
+  panel: 'code_quality' | 'dependencies' | 'secrets' | 'accessibility';
+  findings: TranslatedFinding[];
+  status: 'success' | 'partial' | 'failed';
+  statusReason?: string;
+  truncated?: boolean;
+  originalCount?: number;
+  translatedCount?: number;
+}
+
 // Panel result
 export interface PanelResult {
   panel: 'code_quality' | 'dependencies' | 'secrets' | 'accessibility';
