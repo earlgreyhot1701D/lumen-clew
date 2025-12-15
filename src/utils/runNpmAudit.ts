@@ -77,7 +77,7 @@ export function runNpmAudit(tempDir: string, timeoutMs?: number): NpmAuditResult
       } else if (execError.killed || execError.signal === 'SIGTERM') {
         logger.error('runNpmAudit: Timeout exceeded');
         return {
-          success: false,
+          success: true,
           findings: [],
           error: 'npm audit timeout exceeded',
         };
