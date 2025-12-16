@@ -64,4 +64,7 @@ export const CONFIG = {
 
   // Findings limits
   MAX_FINDINGS_PER_PANEL: 25,
+
+  // Download parallelization
+  DOWNLOAD_BATCH_SIZE: 10,  // Number of concurrent file downloads
 };
