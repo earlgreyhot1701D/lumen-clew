@@ -7,7 +7,7 @@ export function Footer() {
         <a href="#contact" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">Contact</a>
       </div>
       <p className="italic opacity-80">
-        Built for the Anthropic Hackathon 2024
+        Built for SheBuilds on Lovable 2025
       </p>
     </footer>
   );
