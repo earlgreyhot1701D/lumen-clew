@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import { ScanForm } from './ScanForm';
 import { RateLimitState } from '@/lib/types';
 
@@ -5,9 +6,10 @@ interface HeroSectionProps {
   onSubmit: (repoUrl: string, scanMode: 'fast' | 'full') => void;
   isLoading?: boolean;
   rateLimit?: RateLimitState | null;
+  inputRef?: RefObject<HTMLInputElement>;
 }
 
-export function HeroSection({ onSubmit, isLoading, rateLimit }: HeroSectionProps) {
+export function HeroSection({ onSubmit, isLoading, rateLimit, inputRef }: HeroSectionProps) {
   return (
     <section aria-labelledby="hero-heading" className="bg-navy text-cream py-8 px-6 border-b-4 border-amber relative overflow-hidden">
       {/* Decorative SVG background */}
@@ -27,7 +29,7 @@ export function HeroSection({ onSubmit, isLoading, rateLimit }: HeroSectionProps
             Run industry-standard tools on your AI-generated code. Get plain-language insights. No judgment, no jargon.
           </p>
           
-          <ScanForm onSubmit={onSubmit} isLoading={isLoading} rateLimit={rateLimit} />
+          <ScanForm ref={inputRef} onSubmit={onSubmit} isLoading={isLoading} rateLimit={rateLimit} />
           
           <p className="mt-4 text-xs font-headline tracking-widest uppercase text-amber/70 flex gap-4">
             <span>⚡ Fast Analysis</span>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useScan } from '@/hooks/useScan';
 import { useToast } from '@/hooks/use-toast';
 import { Header } from '@/components/Header';
@@ -10,12 +10,15 @@ import { HelpSection } from '@/components/HelpSection';
 import { Footer } from '@/components/Footer';
 import { ScanModal } from '@/components/ScanModal';
 import { ScanResults } from '@/components/ScanResults';
+import { ConfirmNewScanDialog } from '@/components/ConfirmNewScanDialog';
 
 const Index = () => {
   const { scanState, result, error, rateLimit, startScan, resetScan } = useScan();
   const { toast } = useToast();
   const [currentScanUrl, setCurrentScanUrl] = useState('');
   const [currentScanMode, setCurrentScanMode] = useState<'fast' | 'full'>('fast');
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleStartScan = async (repoUrl: string, scanMode: 'fast' | 'full') => {
     setCurrentScanUrl(repoUrl);
@@ -31,9 +34,24 @@ const Index = () => {
     });
   };
 
+  // Show confirmation dialog before resetting (when on results page)
   const handleNewScan = () => {
+    if (scanState === 'success' && result) {
+      setShowConfirmDialog(true);
+    } else {
+      // If not on results page, just reset directly
+      resetScan();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Actually perform the reset after confirmation
+  const confirmNewScan = () => {
+    setShowConfirmDialog(false);
     resetScan();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Focus the input after scroll animation
+    setTimeout(() => inputRef.current?.focus(), 500);
   };
 
   // Show error toast when error state changes
@@ -52,10 +70,15 @@ const Index = () => {
     return (
       <div className="p-4 md:p-8">
         <div className="wireframe-container">
-          <Header onLogoClick={handleNewScan} />
+          <Header onLogoClick={handleNewScan} onNewScan={handleNewScan} showNewScanButton />
           <ScanResults report={result} onNewScan={handleNewScan} />
           <Footer />
         </div>
+        <ConfirmNewScanDialog
+          isOpen={showConfirmDialog}
+          onCancel={() => setShowConfirmDialog(false)}
+          onConfirm={confirmNewScan}
+        />
       </div>
     );
   }
@@ -70,6 +93,7 @@ const Index = () => {
             onSubmit={handleStartScan}
             isLoading={scanState === 'scanning'}
             rateLimit={rateLimit}
+            inputRef={inputRef}
           />
           <HowItWorks />
           <WhatWeCheck />
