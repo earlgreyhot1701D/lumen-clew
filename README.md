@@ -77,6 +77,12 @@ npm run dev
 - ⏱️ Rate limited to **10 scans per day** per IP
 - 🔄 Resets at midnight UTC
 
+## 🤝 Attribution
+
+Built with AI pair programming ([Lovable](https://lovable.dev), Claude, and ChatGPT as my "6th person off the bench").
+
+All architectural decisions, scope choices, and final implementations reviewed and owned by me. AI served as implementation assistant, documentation search, and thinking partner.
+
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details.
