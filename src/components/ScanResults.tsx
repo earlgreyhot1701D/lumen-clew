@@ -230,6 +230,9 @@ function FindingCard({ finding, repoUrl }: { finding: TranslatedFinding; repoUrl
           {finding.commonApproaches && (
             <p><strong>Common approaches:</strong> {finding.commonApproaches}</p>
           )}
+          {finding.reflection && (
+            <p className="italic text-navy/60 mt-2">💭 {finding.reflection}</p>
+          )}
         </div>
       )}
     </div>
