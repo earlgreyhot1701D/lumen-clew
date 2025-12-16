@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Documentation tests only (vitest not configured)
 // BACKEND: Secrets Scanner Tests
 // Documentation for future use (test runner not yet configured in Lovable)
 // Copy to Render repository for execution

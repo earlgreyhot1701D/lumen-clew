@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Documentation tests only (vitest not configured)
 // BACKEND: copy to Render repo/server.js
 // Lumen Clew - Orchestration Engine Tests
 // Prompt 9: Documentation tests for orchestrateScan

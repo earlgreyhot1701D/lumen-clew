@@ -1,4 +1,3 @@
-// @ts-nocheck
 // BACKEND: copy to Render repo/server.js
 // This file fetches repository files from GitHub API
 // Runs only on Node.js backend (Render), not in browser
@@ -57,7 +56,7 @@ function isAllowedFile(filePath: string): boolean {
 
   // Check file extension
   const ext = path.extname(filePath).toLowerCase();
-  return CONFIG.ALLOWED_FILE_TYPES.includes(ext);
+  return (CONFIG.ALLOWED_FILE_TYPES as readonly string[]).includes(ext);
 }
 
 /**

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // BACKEND: copy to Render repo/server.js
 
 import { RawFinding, TranslatedFinding, PanelTranslationResult } from '../lib/types';
