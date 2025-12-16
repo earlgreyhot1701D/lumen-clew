@@ -46,7 +46,7 @@ describe('orchestrateScan', () => {
   // =========================================================================
   describe('rate limiting', () => {
     it('should allow scans when under daily limit', () => {
-      // First 3 scans per IP should succeed (CONFIG.MAX_SCANS_PER_DAY = 3)
+      // First 10 scans per IP should succeed (CONFIG.MAX_SCANS_PER_DAY = 10)
       expect(true).toBe(true);
     });
 
