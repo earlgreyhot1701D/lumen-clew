@@ -1,59 +1,16 @@
-import { useState } from 'react';
-
 export function ScopeSection() {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
-    <section id="scope" className="py-12 bg-white">
-      <div className="container mx-auto px-6">
-        <details 
-          className="max-w-3xl mx-auto"
-          open={isOpen}
-          onClick={(e) => {
-            e.preventDefault();
-            setIsOpen(!isOpen);
-          }}
-        >
-          <summary className="flex items-center justify-center gap-2 cursor-pointer list-none text-navy/60 hover:text-navy transition-colors">
-            <span className={`transition-transform ${isOpen ? 'rotate-90' : ''}`}>▸</span>
-            <span className="font-medium">Scope and limitations</span>
-          </summary>
-          
-          <div className="mt-6 bg-cream border-3 border-navy/10 p-6 shadow-craft">
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-headline font-bold uppercase tracking-wide text-navy mb-4">
-                  ✅ Currently In Scope
-                </h3>
-                <ul className="space-y-2 text-navy/70">
-                  <li>• Public GitHub repositories</li>
-                  <li>• JavaScript & TypeScript</li>
-                  <li>• Static code analysis</li>
-                  <li>• Dependency vulnerability checks</li>
-                  <li>• Basic secrets detection</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="font-headline font-bold uppercase tracking-wide text-navy mb-4">
-                  🔜 Not In Scope (Yet)
-                </h3>
-                <ul className="space-y-2 text-navy/70">
-                  <li>• Private repositories</li>
-                  <li>• Python, Ruby, Go (coming soon)</li>
-                  <li>• Runtime analysis</li>
-                  <li>• Performance profiling</li>
-                  <li>• Custom rule configuration</li>
-                </ul>
-              </div>
-            </div>
-            
-            <p className="mt-6 text-sm text-navy/50 italic border-t border-navy/10 pt-4">
-              This is static analysis only. For runtime checks (contrast, keyboard navigation), we recommend using Lighthouse.
-            </p>
-          </div>
-        </details>
-      </div>
+    <section aria-labelledby="scope-heading" className="py-8 px-8 bg-cream text-center border-y-4 border-navy/10">
+      <details className="max-w-2xl mx-auto cursor-pointer group inline-block">
+        <summary className="font-headline font-bold text-lg text-navy/60 hover:text-navy transition flex items-center justify-center gap-2 focus:text-navy">
+          <span className="text-amber text-xl group-open:rotate-90 transition-transform duration-200 font-sans" aria-hidden="true">▸</span>
+          Scope and limitations
+        </summary>
+        <div className="mt-5 text-left bg-white p-6 border-3 border-navy/10 shadow-craft leading-relaxed">
+          <p className="mb-2"><strong>Scope:</strong> Common JS/TS patterns useful for builders.</p>
+          <p><strong>Limitation:</strong> Educational awareness only. Not a professional audit. We do not run your code.</p>
+        </div>
+      </details>
     </section>
   );
 }

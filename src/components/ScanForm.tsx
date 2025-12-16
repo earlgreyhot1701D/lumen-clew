@@ -32,19 +32,20 @@ export function ScanForm({ onSubmit, isLoading, rateLimit }: ScanFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="bg-navy border-3 border-amber p-2 flex flex-col md:flex-row gap-3 items-center shadow-amber-glow w-full hover:-translate-y-1 transition-all duration-300">
         <input
           type="text"
           value={repoUrl}
           onChange={(e) => setRepoUrl(e.target.value)}
+          aria-label="GitHub Repository URL"
           placeholder="https://github.com/your-username/repo-name"
-          className="flex-1 px-4 py-3 bg-cream/5 border-2 border-cream/30 text-cream font-mono placeholder:text-cream/40 focus:outline-none focus:border-amber transition-colors"
+          className="w-full flex-1 bg-cream/5 text-cream text-lg p-3 border-2 border-transparent focus:border-amber focus:bg-navy outline-none font-mono placeholder-cream/30 transition-colors"
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading || (rateLimit && !rateLimit.canScan)}
-          className="px-8 py-3 bg-amber text-navy font-headline font-bold uppercase tracking-wide hover:bg-amber/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full md:w-auto bg-amber text-navy font-headline font-bold text-xl px-6 py-3 hover:bg-amber/90 transition shadow-md tracking-wider whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-navy"
         >
           {isLoading ? 'Scanning...' : 'Scan My Code'}
         </button>

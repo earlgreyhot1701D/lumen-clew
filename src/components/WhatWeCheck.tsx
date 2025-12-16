@@ -1,64 +1,53 @@
-import { useState } from 'react';
-
 const PANELS = [
   {
     emoji: '🔍',
     title: 'Code Quality',
-    description: 'ESLint analysis for maintainability, best practices, and potential bugs.',
+    tool: 'ESLint standard config.',
+    description: 'Checks for logic errors and confusing patterns.',
   },
   {
     emoji: '📦',
     title: 'Dependency Health',
-    description: 'npm audit for known vulnerabilities in your package dependencies.',
+    tool: 'npm audit.',
+    description: 'Checks libraries against vulnerability databases.',
   },
   {
     emoji: '🗝️',
     title: 'Secrets & Config',
-    description: 'Regex-based scanning for accidentally committed credentials.',
+    tool: 'Pattern Matching.',
+    description: 'Scans for potential API keys or tokens.',
   },
   {
     emoji: '♿',
     title: 'Accessibility',
-    description: 'Static A11y analysis for inclusive design patterns.',
+    tool: 'AI Static Analysis.',
+    description: 'Checks for basic HTML semantic issues.',
   },
 ];
 
 export function WhatWeCheck() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   return (
-    <section id="what-we-check" className="py-16 bg-cream">
-      <div className="container mx-auto px-6">
-        <h2 className="font-headline text-3xl md:text-4xl font-black uppercase tracking-tight text-navy text-center mb-12">
-          What We Check
-        </h2>
-        
-        <div className="max-w-3xl mx-auto space-y-4">
-          {PANELS.map((panel, index) => (
-            <details 
-              key={panel.title}
-              className="group bg-white border-3 border-navy/10 shadow-craft"
-              open={openIndex === index}
-              onClick={(e) => {
-                e.preventDefault();
-                setOpenIndex(openIndex === index ? null : index);
-              }}
-            >
-              <summary className="flex items-center gap-4 p-4 cursor-pointer list-none">
-                <span className="text-2xl">{panel.emoji}</span>
-                <span className="flex-1 font-headline font-bold uppercase tracking-wide text-navy">
-                  {panel.title}
-                </span>
-                <span className="text-navy/40 transition-transform group-open:rotate-90">
-                  ▸
-                </span>
-              </summary>
-              <div className="px-4 pb-4 text-navy/70">
-                <p>{panel.description}</p>
-              </div>
-            </details>
-          ))}
-        </div>
+    <section aria-labelledby="checks-heading" className="py-10 px-8 bg-white">
+      <h2 id="checks-heading" className="text-3xl font-bold text-center mb-8 text-navy">What We Check</h2>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-5 max-w-6xl mx-auto">
+        {PANELS.map((panel) => (
+          <details 
+            key={panel.title}
+            className="group bg-cream border-3 border-navy/10 p-4 cursor-pointer transition-all hover:shadow-craft hover:border-amber open:bg-white open:border-navy/30 open:shadow-craft-lg"
+          >
+            <summary className="font-headline font-bold text-lg flex items-center justify-between text-navy focus:text-amber">
+              <span className="flex items-center gap-2">
+                <span className="text-xl opacity-70" aria-hidden="true">{panel.emoji}</span> 
+                {panel.title}
+              </span>
+              <span className="text-amber text-xl group-open:rotate-90 transition-transform duration-200 font-sans" aria-hidden="true">▸</span>
+            </summary>
+            <div className="mt-4 pt-4 border-t-2 border-navy/5 text-navy/80 space-y-2 text-sm leading-relaxed">
+              <p><strong>Tool:</strong> {panel.tool}</p>
+              <p>{panel.description}</p>
+            </div>
+          </details>
+        ))}
       </div>
     </section>
   );
