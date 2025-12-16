@@ -23,14 +23,11 @@ export function ConfirmNewScanDialog({ isOpen, onCancel, onConfirm }: ConfirmNew
           <AlertDialogTitle className="font-headline text-navy text-2xl">
             Start a New Scan?
           </AlertDialogTitle>
-          <AlertDialogDescription asChild>
-            <div className="text-navy/70 space-y-2">
-              <p>Your current results will be cleared.</p>
-              <p>Results are not stored between sessions.</p>
-              <p className="text-amber font-medium">
-                💡 Use the "Download Report" button to save your results first.
-              </p>
-            </div>
+          <AlertDialogDescription className="text-navy/70">
+            Your current results will be cleared. Results are not stored between sessions.
+            <span className="block mt-2 text-amber font-medium">
+              💡 Use the "Download Report" button to save your results first.
+            </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
