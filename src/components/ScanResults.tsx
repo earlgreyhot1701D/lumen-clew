@@ -194,7 +194,7 @@ export function ScanResults({ report, onNewScan, previewMode = false }: ScanResu
         <div className="relative z-10 flex items-center justify-center gap-6">
           <div className="h-2 w-16 bg-amber hidden md:block shadow-sm" aria-hidden="true"></div>
           <h2 id="results-heading" className="text-4xl md:text-5xl text-amber text-center uppercase tracking-tight font-headline font-black shadow-sm">
-            {previewMode ? "What You'll See" : 'Your Scan Results'}
+            Your Scan Results
           </h2>
           <div className="h-2 w-16 bg-amber hidden md:block shadow-sm" aria-hidden="true"></div>
         </div>
@@ -206,13 +206,10 @@ export function ScanResults({ report, onNewScan, previewMode = false }: ScanResu
           <span className="text-3xl" aria-hidden="true">ℹ️</span>
           <div>
             <h3 className="font-headline font-bold text-navy text-lg mb-1">
-              {previewMode ? 'How We Present Findings' : 'Understanding Your Results'}
+              Understanding Your Results
             </h3>
             <p className="text-navy/80 text-sm leading-relaxed">
-              {previewMode 
-                ? 'We translate technical tool output into plain language. Each finding includes context, common approaches, and a reflection question to help you decide what matters for your project.'
-                : <>We translate findings from standard tools. <strong>This is awareness, not direction.</strong> Use your context to make decisions.</>
-              }
+              We translate findings from standard tools. <strong>This is awareness, not direction.</strong> Use your context to make decisions.
             </p>
           </div>
         </div>
