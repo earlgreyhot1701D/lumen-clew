@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ScanReport, TranslatedFinding } from '@/lib/types';
+import { generateGitHubFileLink } from '@/lib/githubLinks';
 
 interface ScanResultsProps {
   report?: ScanReport;
@@ -29,6 +30,13 @@ function generateMarkdownReport(report: ScanReport): string {
     return findings
       .map((f, idx) => {
         let text = `### ${idx + 1}. ${f.plainLanguage} ${importanceEmoji[f.importance] || ''} [${f.importance.toUpperCase()}]\n\n`;
+        if (f.file) {
+          const location = f.line ? `${f.file}:${f.line}` : f.file;
+          const ghLink = generateGitHubFileLink(report.repoUrl, f.file, f.line);
+          text += `**Location:** \`${location}\``;
+          if (ghLink) text += ` ([View on GitHub](${ghLink}))`;
+          text += '\n\n';
+        }
         if (f.context) text += `**Context:** ${f.context}\n\n`;
         if (f.commonApproaches && f.commonApproaches.length > 0) {
           const approaches = Array.isArray(f.commonApproaches) ? f.commonApproaches.join(', ') : f.commonApproaches;
@@ -163,8 +171,9 @@ const IMPORTANCE_COLORS: Record<string, string> = {
   fyi: 'bg-gray-100 text-gray-600 border border-gray-200',
 };
 
-function FindingCard({ finding }: { finding: TranslatedFinding }) {
+function FindingCard({ finding, repoUrl }: { finding: TranslatedFinding; repoUrl?: string }) {
   const [isOpen, setIsOpen] = useState(false);
+  const githubLink = repoUrl ? generateGitHubFileLink(repoUrl, finding.file, finding.line) : null;
   
   return (
     <div 
@@ -181,6 +190,25 @@ function FindingCard({ finding }: { finding: TranslatedFinding }) {
           {finding.importance}
         </span>
       </div>
+      {/* Location & GitHub Link */}
+      {finding.file && (
+        <div className="mt-2 flex items-center gap-3 text-xs">
+          <span className="font-mono text-navy/60">
+            📍 {finding.file}{finding.line ? `:${finding.line}` : ''}
+          </span>
+          {githubLink && (
+            <a
+              href={githubLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-amber hover:text-amber/80 font-semibold transition-colors"
+            >
+              View on GitHub →
+            </a>
+          )}
+        </div>
+      )}
       {isOpen && (
         <div className="mt-3 pt-3 border-t border-navy/10 text-sm text-navy/70 space-y-2">
           {finding.context && <p>{finding.context}</p>}
@@ -227,10 +255,12 @@ function PreviewPanel({ panelKey }: { panelKey: string }) {
 
 function Panel({ 
   panelKey, 
-  findings 
+  findings,
+  repoUrl
 }: { 
   panelKey: string;
   findings: TranslatedFinding[];
+  repoUrl?: string;
 }) {
   const config = PANEL_CONFIG[panelKey as keyof typeof PANEL_CONFIG];
   if (!config) return null;
@@ -250,7 +280,7 @@ function Panel({
         <div className="space-y-3">
           <p className="font-bold text-navy mb-3">Issues found: {findings.length}</p>
           {findings.map((finding, idx) => (
-            <FindingCard key={idx} finding={finding} />
+            <FindingCard key={idx} finding={finding} repoUrl={repoUrl} />
           ))}
           
           {isAccessibility && (
@@ -323,10 +353,10 @@ export function ScanResults({ report, onNewScan, previewMode = false }: ScanResu
           </>
         ) : report ? (
           <>
-            <Panel panelKey="code_quality" findings={report.panels.codeQuality.findings} />
-            <Panel panelKey="dependencies" findings={report.panels.dependencies.findings} />
-            <Panel panelKey="secrets" findings={report.panels.secrets.findings} />
-            <Panel panelKey="accessibility" findings={report.panels.accessibility.findings} />
+            <Panel panelKey="code_quality" findings={report.panels.codeQuality.findings} repoUrl={report.repoUrl} />
+            <Panel panelKey="dependencies" findings={report.panels.dependencies.findings} repoUrl={report.repoUrl} />
+            <Panel panelKey="secrets" findings={report.panels.secrets.findings} repoUrl={report.repoUrl} />
+            <Panel panelKey="accessibility" findings={report.panels.accessibility.findings} repoUrl={report.repoUrl} />
           </>
         ) : null}
       </div>
