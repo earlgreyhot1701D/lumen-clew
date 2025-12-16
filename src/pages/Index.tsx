@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useScan } from '@/hooks/useScan';
 import { useToast } from '@/hooks/use-toast';
 import { Header } from '@/components/Header';
@@ -37,13 +37,15 @@ const Index = () => {
   };
 
   // Show error toast when error state changes
-  if (error && scanState === 'error') {
-    toast({
-      variant: 'destructive',
-      title: 'Scan failed',
-      description: error,
-    });
-  }
+  useEffect(() => {
+    if (error && scanState === 'error') {
+      toast({
+        variant: 'destructive',
+        title: 'Scan failed',
+        description: error,
+      });
+    }
+  }, [error, scanState, toast]);
 
   // Show results view after successful scan
   if (scanState === 'success' && result) {
