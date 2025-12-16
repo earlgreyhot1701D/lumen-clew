@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Documentation tests only (vitest not configured)
 // BACKEND: Accessibility Analyzer Tests
 // Documentation for future use (test runner not yet configured)
 

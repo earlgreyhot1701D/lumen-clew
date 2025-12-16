@@ -1,4 +1,3 @@
-// @ts-nocheck
 // BACKEND: copy to Render repo/server.js
 // Analyzes JSX/HTML/TSX files for accessibility code patterns
 // Receives tempDir from Prompt 3 (fetchGitHubRepo)

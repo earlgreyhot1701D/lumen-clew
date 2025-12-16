@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Documentation tests only (vitest not configured)
 // BACKEND: copy to Render repo/__tests__/claudeTranslator.test.js
 
 /**

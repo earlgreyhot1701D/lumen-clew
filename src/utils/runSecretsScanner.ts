@@ -1,4 +1,3 @@
-// @ts-nocheck
 // BACKEND: copy to Render repo/server.js
 // This file scans repository files for hardcoded secrets and credentials
 // Receives tempDir from Prompt 3 (fetchGitHubRepo)
@@ -135,7 +134,7 @@ function shouldScanFile(filePath: string): boolean {
   }
   
   // Check against ALLOWED_FILE_TYPES
-  if (ext && !CONFIG.ALLOWED_FILE_TYPES.includes(ext)) {
+  if (ext && !(CONFIG.ALLOWED_FILE_TYPES as readonly string[]).includes(ext)) {
     return false;
   }
   
@@ -228,7 +227,7 @@ function walkDirectory(
       
       if (entry.isDirectory()) {
         // Skip ignored directories
-        if (CONFIG.FILES_TO_IGNORE.includes(entry.name)) {
+        if ((CONFIG.FILES_TO_IGNORE as readonly string[]).includes(entry.name)) {
           continue;
         }
         

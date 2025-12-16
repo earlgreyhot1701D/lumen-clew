@@ -1,4 +1,3 @@
-// @ts-nocheck
 // BACKEND: copy to Render repo/server.js
 // This file runs npm audit on repository files and normalizes output
 // Receives tempDir from Prompt 3 (fetchGitHubRepo)

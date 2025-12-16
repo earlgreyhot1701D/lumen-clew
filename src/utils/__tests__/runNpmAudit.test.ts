@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Documentation tests only (vitest not configured)
 // BACKEND: npm Audit Runner Tests
 // Documentation for future use (test runner not yet configured)
 // These tests document expected behavior of runNpmAudit

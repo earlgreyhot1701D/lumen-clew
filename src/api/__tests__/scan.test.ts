@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Documentation tests only (vitest not configured)
 // BACKEND: Documentation tests for API endpoint
 // Lumen Clew - Prompt 10: Tests for handleScanRequest
 

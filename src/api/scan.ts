@@ -1,9 +1,19 @@
-// @ts-nocheck
 // BACKEND: API endpoint for scan requests
 // Lumen Clew - Prompt 10: Thin Express handler wrapping orchestrateScan
 
-import type { Request, Response } from 'express';
 import { orchestrateScan, OrchestrateScanResult } from '../utils/orchestrateScan';
+
+// Inline Express types (minimal interface we actually use)
+interface Request {
+  body: unknown;
+  headers: Record<string, string | string[] | undefined>;
+  ip?: string;
+}
+
+interface Response {
+  status(code: number): Response;
+  json(data: unknown): void;
+}
 
 // ============================================================================
 // Types

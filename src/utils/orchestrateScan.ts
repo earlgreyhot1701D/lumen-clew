@@ -1,4 +1,3 @@
-// @ts-nocheck
 // BACKEND: copy to Render repo/server.js
 // Lumen Clew - Scan Orchestration Engine
 // Prompt 9: Coordinates all tool runners, translation, and report assembly
@@ -255,7 +254,7 @@ export async function orchestrateScan(
           ? CONFIG.FAST_SCAN.maxFiles
           : CONFIG.FULL_SCAN.maxFiles,
       maxFileSizeMb: CONFIG.MAX_FILE_SIZE_MB,
-      ignoredDirectories: CONFIG.FILES_TO_IGNORE,
+      ignoredDirectories: [...CONFIG.FILES_TO_IGNORE],
       filesCounted: fetchResult.fileCount || 0,
       filesScanned: fetchResult.filesScanned || 0,
       filesSkipped: fetchResult.filesSkipped || 0,
