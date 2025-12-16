@@ -1,73 +1,86 @@
-# Welcome to your Lovable project
+# 🕯️ Lumen Clew
 
-## Project info
+**Friendly code health scanner for JavaScript & TypeScript projects.**
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+![Lumen Clew Screenshot](public/screenshot.png)
 
-## How can I edit this code?
+Lumen Clew helps developers understand their codebase through gentle, educational feedback—not judgment. Scan any public GitHub repository and get insights across 4 areas.
 
-There are several ways of editing your application.
+🔗 **Try it now:** [lumenclew.lovable.app](https://lumenclew.lovable.app/)
 
-**Use Lovable**
+## ✨ Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- **🔍 Code Quality** - ESLint-powered pattern and consistency checks
+- **📦 Dependency Health** - npm audit for known vulnerabilities  
+- **🔑 Secrets Detection** - Scans for accidentally committed keys & tokens
+- **♿ Accessibility** - JSX/HTML a11y best practice review
+- **🤖 AI Explanations** - Claude translates findings into plain English
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🎯 Philosophy
 
-**Use your preferred IDE**
+- **Awareness, not judgment** - Learn without shame
+- **Reflection, not direction** - Suggestions, not prescriptions
+- **Clean and calm** - No fear-based messaging
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+| Layer | Technologies |
+|-------|-------------|
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui |
+| Backend | Node.js, Express (hosted on Render) |
+| Analysis | ESLint, npm audit, custom scanners |
+| AI | Claude (Anthropic) |
 
-Follow these steps:
+## 🚀 Quick Start
 
+### Use the App
+1. Visit [lumenclew.lovable.app](https://lumenclew.lovable.app/)
+2. Paste any public GitHub repository URL
+3. Click **"Scan My Code"** and review your results
+
+### Run Locally
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+git clone https://github.com/YOUR_USERNAME/lumen-clew.git
+cd lumen-clew
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 📁 Project Structure
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+├── src/
+│   ├── components/     # React UI components
+│   ├── pages/          # Route pages (Index, NotFound)
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Shared utilities & types
+│   └── utils/          # Scan utilities (frontend copies)
+├── render-backend/     # Node.js backend for Render.com
+│   ├── api/            # API endpoint handlers
+│   ├── lib/            # Backend config & types
+│   └── utils/          # Scan runners & orchestration
+└── public/             # Static assets
+```
 
-**Use GitHub Codespaces**
+## 📋 Supported Languages
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+| Status | Language |
+|--------|----------|
+| ✅ Now | JavaScript (.js, .jsx) |
+| ✅ Now | TypeScript (.ts, .tsx) |
+| 🚀 Soon | Python, Go, Ruby |
 
-## What technologies are used for this project?
+## 🔒 Privacy & Limits
 
-This project is built with:
+- ✅ Only scans **public** GitHub repositories
+- ✅ No code is stored after scan completes
+- ⏱️ Rate limited to **10 scans per day** per IP
+- 🔄 Resets at midnight UTC
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📄 License
 
-## How can I deploy this project?
+MIT License - see [LICENSE](LICENSE) for details.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Built with 🕯️ using [Lovable](https://lovable.dev)
