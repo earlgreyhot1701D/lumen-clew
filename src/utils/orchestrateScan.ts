@@ -265,6 +265,7 @@ export async function orchestrateScan(
     // Step 5: Run All Analyzers (Best-Effort, Parallel)
     // ========================================================================
     const scanConfig = scanMode === 'fast' ? CONFIG.FAST_SCAN : CONFIG.FULL_SCAN;
+    const hasPackageJson = fs.existsSync(path.join(tempDir!, 'package.json'));
 
     logger.info('Running analyzers...');
     const [eslintResult, npmAuditResult, secretsResult, a11yResult] =
@@ -272,9 +273,11 @@ export async function orchestrateScan(
         runToolSafely('ESLint', () =>
           runESLint(tempDir!, scanConfig.eslintTimeoutMs)
         ),
-        runToolSafely('npm audit', () =>
-          runNpmAudit(tempDir!, scanConfig.npmAuditTimeoutMs)
-        ),
+        hasPackageJson
+          ? runToolSafely('npm audit', () =>
+              runNpmAudit(tempDir!, scanConfig.npmAuditTimeoutMs)
+            )
+          : Promise.resolve({ success: true, findings: [], error: undefined } as ToolResult),
         runToolSafely('Secrets Scanner', () =>
           runSecretsScanner(tempDir!, scanConfig.secretsScanTimeoutMs)
         ),
@@ -282,6 +285,10 @@ export async function orchestrateScan(
           runA11yAnalyzer(tempDir!, scanConfig.a11yTimeoutMs)
         ),
       ]);
+
+    if (!hasPackageJson) {
+      logger.info('Skipping npm audit - no package.json found');
+    }
 
     // ========================================================================
     // Step 6: Translate All Findings
@@ -417,7 +424,12 @@ export async function orchestrateScan(
     // ========================================================================
     if (tempDir) {
       logger.info(`Cleaning up ${tempDir}`);
-      cleanupDir(tempDir);
+      try {
+        cleanupDir(tempDir);
+      } catch (cleanupError) {
+        logger.error(`Failed to cleanup ${tempDir}`, cleanupError);
+        // Don't throw - cleanup errors shouldn't fail the entire scan
+      }
     }
   }
 }
