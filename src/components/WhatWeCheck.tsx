@@ -1,62 +1,63 @@
-import { Code2, Package, KeyRound, Accessibility } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
 
 const PANELS = [
   {
-    icon: Code2,
+    emoji: '🔍',
     title: 'Code Quality',
-    description: 'ESLint analysis for maintainability, best practices, and potential bugs',
-    color: 'bg-blue-500/10 text-blue-600',
+    description: 'ESLint analysis for maintainability, best practices, and potential bugs.',
   },
   {
-    icon: Package,
-    title: 'Dependencies',
-    description: 'npm audit for known vulnerabilities in your package dependencies',
-    color: 'bg-purple-500/10 text-purple-600',
+    emoji: '📦',
+    title: 'Dependency Health',
+    description: 'npm audit for known vulnerabilities in your package dependencies.',
   },
   {
-    icon: KeyRound,
-    title: 'Secrets',
-    description: 'Regex-based scanning for accidentally committed credentials',
-    color: 'bg-red-500/10 text-red-600',
+    emoji: '🗝️',
+    title: 'Secrets & Config',
+    description: 'Regex-based scanning for accidentally committed credentials.',
   },
   {
-    icon: Accessibility,
+    emoji: '♿',
     title: 'Accessibility',
-    description: 'Static A11y analysis for inclusive design patterns',
-    color: 'bg-green-500/10 text-green-600',
+    description: 'Static A11y analysis for inclusive design patterns.',
   },
 ];
 
 export function WhatWeCheck() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   return (
-    <section id="what-we-check" className="py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="font-headline text-2xl md:text-3xl font-bold uppercase tracking-wide text-navy text-center mb-12">
+    <section id="what-we-check" className="py-16 bg-cream">
+      <div className="container mx-auto px-6">
+        <h2 className="font-headline text-3xl md:text-4xl font-black uppercase tracking-tight text-navy text-center mb-12">
           What We Check
         </h2>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-          {PANELS.map((panel) => {
-            const Icon = panel.icon;
-            return (
-              <Card key={panel.title} className="bg-card border-border shadow-craft hover:shadow-craft-lg transition-shadow">
-                <CardHeader className="pb-2">
-                  <div className={`w-10 h-10 rounded-lg ${panel.color} flex items-center justify-center mb-2`}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <CardTitle className="font-headline text-base uppercase tracking-wide">
-                    {panel.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {panel.description}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
+        <div className="max-w-3xl mx-auto space-y-4">
+          {PANELS.map((panel, index) => (
+            <details 
+              key={panel.title}
+              className="group bg-white border-3 border-navy/10 shadow-craft"
+              open={openIndex === index}
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenIndex(openIndex === index ? null : index);
+              }}
+            >
+              <summary className="flex items-center gap-4 p-4 cursor-pointer list-none">
+                <span className="text-2xl">{panel.emoji}</span>
+                <span className="flex-1 font-headline font-bold uppercase tracking-wide text-navy">
+                  {panel.title}
+                </span>
+                <span className="text-navy/40 transition-transform group-open:rotate-90">
+                  ▸
+                </span>
+              </summary>
+              <div className="px-4 pb-4 text-navy/70">
+                <p>{panel.description}</p>
+              </div>
+            </details>
+          ))}
         </div>
       </div>
     </section>

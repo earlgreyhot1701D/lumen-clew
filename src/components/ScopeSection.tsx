@@ -1,63 +1,58 @@
-import { CheckCircle2, Circle } from 'lucide-react';
-
-const IN_SCOPE = [
-  'Public GitHub repositories',
-  'JavaScript/TypeScript files (.js, .jsx, .ts, .tsx)',
-  'package.json dependency analysis',
-  'Static code analysis (no runtime)',
-];
-
-const NOT_YET = [
-  'Private repositories',
-  'Other languages (Python, Go, etc.)',
-  'Runtime/dynamic analysis',
-  'Custom ESLint configurations',
-];
+import { useState } from 'react';
 
 export function ScopeSection() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <section id="scope" className="py-16 bg-card/50">
-      <div className="container mx-auto px-4">
-        <h2 className="font-headline text-2xl md:text-3xl font-bold uppercase tracking-wide text-navy text-center mb-12">
-          Scope & Transparency
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          <div>
-            <h3 className="font-headline text-lg font-bold uppercase tracking-wide text-navy mb-4 flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-sage" />
-              Currently In Scope
-            </h3>
-            <ul className="space-y-3">
-              {IN_SCOPE.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm text-foreground">
-                  <CheckCircle2 className="w-4 h-4 text-sage mt-0.5 flex-shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
+    <section id="scope" className="py-12 bg-white">
+      <div className="container mx-auto px-6">
+        <details 
+          className="max-w-3xl mx-auto"
+          open={isOpen}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }}
+        >
+          <summary className="flex items-center justify-center gap-2 cursor-pointer list-none text-navy/60 hover:text-navy transition-colors">
+            <span className={`transition-transform ${isOpen ? 'rotate-90' : ''}`}>▸</span>
+            <span className="font-medium">Scope and limitations</span>
+          </summary>
           
-          <div>
-            <h3 className="font-headline text-lg font-bold uppercase tracking-wide text-navy mb-4 flex items-center gap-2">
-              <Circle className="w-5 h-5 text-muted-foreground" />
-              Not In Scope (Yet)
-            </h3>
-            <ul className="space-y-3">
-              {NOT_YET.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <Circle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+          <div className="mt-6 bg-cream border-3 border-navy/10 p-6 shadow-craft">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="font-headline font-bold uppercase tracking-wide text-navy mb-4">
+                  ✅ Currently In Scope
+                </h3>
+                <ul className="space-y-2 text-navy/70">
+                  <li>• Public GitHub repositories</li>
+                  <li>• JavaScript & TypeScript</li>
+                  <li>• Static code analysis</li>
+                  <li>• Dependency vulnerability checks</li>
+                  <li>• Basic secrets detection</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="font-headline font-bold uppercase tracking-wide text-navy mb-4">
+                  🔜 Not In Scope (Yet)
+                </h3>
+                <ul className="space-y-2 text-navy/70">
+                  <li>• Private repositories</li>
+                  <li>• Python, Ruby, Go (coming soon)</li>
+                  <li>• Runtime analysis</li>
+                  <li>• Performance profiling</li>
+                  <li>• Custom rule configuration</li>
+                </ul>
+              </div>
+            </div>
+            
+            <p className="mt-6 text-sm text-navy/50 italic border-t border-navy/10 pt-4">
+              This is static analysis only. For runtime checks (contrast, keyboard navigation), we recommend using Lighthouse.
+            </p>
           </div>
-        </div>
-        
-        <p className="text-center text-sm text-muted-foreground mt-8 max-w-xl mx-auto">
-          We believe in transparency about what our tools can and cannot do. 
-          Static analysis is powerful but has limitations—use it as one input among many.
-        </p>
+        </details>
       </div>
     </section>
   );
