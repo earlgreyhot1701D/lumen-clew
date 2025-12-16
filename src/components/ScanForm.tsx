@@ -54,7 +54,9 @@ export const ScanForm = forwardRef<HTMLInputElement, ScanFormProps>(
         </div>
         
         {error && (
-          <p className="mt-3 text-red-400 text-sm">{error}</p>
+          <div className="mt-3 bg-amber/10 border-2 border-amber/50 px-4 py-2">
+            <p className="text-amber text-sm font-medium">{error}</p>
+          </div>
         )}
         
         {rateLimit && (
