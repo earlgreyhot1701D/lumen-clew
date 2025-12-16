@@ -65,7 +65,7 @@ Response:
 
 ## Rate Limiting
 
-- 3 scans per day per IP address
+- 10 scans per day per IP address
 - Resets at midnight UTC
 
 ## Environment Variables
