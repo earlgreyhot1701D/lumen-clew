@@ -1,8 +1,10 @@
 interface HeaderProps {
   onLogoClick?: () => void;
+  onNewScan?: () => void;
+  showNewScanButton?: boolean;
 }
 
-export function Header({ onLogoClick }: HeaderProps) {
+export function Header({ onLogoClick, onNewScan, showNewScanButton }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 bg-cream border-b-4 border-navy px-6 py-4 flex justify-between items-center shadow-craft">
       <button 
@@ -15,17 +17,27 @@ export function Header({ onLogoClick }: HeaderProps) {
         <span className="text-3xl font-headline font-black text-amber tracking-tight uppercase">Lumen Clew</span>
       </button>
       
-      <nav className="space-x-6 font-headline font-bold text-sm uppercase tracking-widest text-navy/80 hidden md:block" aria-label="Main Navigation">
-        <a href="#about" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">About</a>
-        <a href="#docs" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">Docs</a>
-        <a 
-          href="https://github.com" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-amber border-b-2 border-amber hover:text-navy hover:border-navy transition"
-        >
-          GitHub →
-        </a>
+      <nav className="flex items-center gap-6 font-headline font-bold text-sm uppercase tracking-widest text-navy/80" aria-label="Main Navigation">
+        {showNewScanButton && onNewScan && (
+          <button
+            onClick={onNewScan}
+            className="bg-amber text-navy font-headline font-bold text-sm px-4 py-2 hover:bg-amber/90 transition uppercase tracking-wider"
+          >
+            New Scan
+          </button>
+        )}
+        <div className="hidden md:flex items-center gap-6">
+          <a href="#about" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">About</a>
+          <a href="#docs" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">Docs</a>
+          <a 
+            href="https://github.com" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-amber border-b-2 border-amber hover:text-navy hover:border-navy transition"
+          >
+            GitHub →
+          </a>
+        </div>
       </nav>
     </header>
   );
