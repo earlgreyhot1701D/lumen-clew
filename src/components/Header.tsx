@@ -27,10 +27,10 @@ export function Header({ onLogoClick, onNewScan, showNewScanButton }: HeaderProp
           </button>
         )}
         <div className="hidden md:flex items-center gap-6">
-          <a href="#about" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">About</a>
-          <a href="#docs" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">Docs</a>
+          <a href="https://www.linkedin.com/in/la-shara-cordero-a0017a11/" target="_blank" rel="noopener noreferrer" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">About</a>
+          <a href="https://github.com/earlgreyhot1701D/lumen-clew/blob/main/README.md" target="_blank" rel="noopener noreferrer" className="hover:text-amber transition border-b-2 border-transparent hover:border-amber focus:text-amber">Docs</a>
           <a 
-            href="https://github.com" 
+            href="https://github.com/earlgreyhot1701D/lumen-clew" 
             target="_blank"
             rel="noopener noreferrer"
             className="text-amber border-b-2 border-amber hover:text-navy hover:border-navy transition"

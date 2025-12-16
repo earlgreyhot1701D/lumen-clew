@@ -6,7 +6,7 @@ export function HelpSection() {
         <div className="bg-cream border-3 border-transparent hover:border-amber text-navy p-6 shadow-craft hover:shadow-craft-lg hover:-translate-y-1 transition-all">
           <h3 className="font-bold text-xl mb-3">Don't have GitHub?</h3>
           <p className="text-navy/80 mb-5 text-sm">Push from Lovable or Replit in seconds.</p>
-          <a href="#video" className="text-navy font-headline font-bold uppercase tracking-wider text-sm border-b-2 border-amber pb-1 hover:bg-amber px-1 transition-all focus:ring-2 focus:ring-amber">Watch Video →</a>
+          <a href="https://docs.lovable.dev" target="_blank" rel="noopener noreferrer" className="text-navy font-headline font-bold uppercase tracking-wider text-sm border-b-2 border-amber pb-1 hover:bg-amber px-1 transition-all focus:ring-2 focus:ring-amber">Learn Lovable →</a>
         </div>
         <div className="bg-cream border-3 border-transparent hover:border-amber text-navy p-6 shadow-craft hover:shadow-craft-lg hover:-translate-y-1 transition-all">
           <h3 className="font-bold text-xl mb-3">Languages</h3>
@@ -15,7 +15,7 @@ export function HelpSection() {
         <div className="bg-cream border-3 border-transparent hover:border-amber text-navy p-6 shadow-craft hover:shadow-craft-lg hover:-translate-y-1 transition-all">
           <h3 className="font-bold text-xl mb-3">Questions?</h3>
           <p className="text-navy/80 mb-5 text-sm">Check FAQ for privacy & data info.</p>
-          <a href="#faq" className="text-navy font-headline font-bold uppercase tracking-wider text-sm border-b-2 border-amber pb-1 hover:bg-amber px-1 transition-all focus:ring-2 focus:ring-amber">View FAQ →</a>
+          <a href="#scope-heading" className="text-navy font-headline font-bold uppercase tracking-wider text-sm border-b-2 border-amber pb-1 hover:bg-amber px-1 transition-all focus:ring-2 focus:ring-amber">See Scope →</a>
         </div>
       </div>
     </section>

@@ -93,6 +93,10 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-warm-gray text-foreground font-sans antialiased;
     background-image: radial-gradient(#1a2332 0.5px, transparent 0.5px);
