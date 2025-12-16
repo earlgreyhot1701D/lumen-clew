@@ -1,10 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
 } from '@/components/ui/dialog';
 import {
   AlertDialog,
@@ -16,8 +13,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import { CheckCircle2, Circle, Loader2 } from 'lucide-react';
 
 interface ScanModalProps {
   isOpen: boolean;
@@ -27,20 +22,27 @@ interface ScanModalProps {
 }
 
 const SCAN_STEPS = [
-  { id: 'clone', label: 'Cloning repository' },
-  { id: 'eslint', label: 'Running ESLint analysis' },
-  { id: 'npm', label: 'Checking npm dependencies' },
-  { id: 'secrets', label: 'Scanning for secrets' },
-  { id: 'a11y', label: 'Analyzing accessibility' },
-  { id: 'translate', label: 'Translating findings' },
+  { id: 'clone', emoji: '🚚', label: 'Cloning repository...' },
+  { id: 'eslint', emoji: '🔍', label: 'Running code quality scan...' },
+  { id: 'deps', emoji: '📦', label: 'Checking dependencies...' },
+  { id: 'secrets', emoji: '🗝️', label: 'Scanning for secrets...' },
+  { id: 'insights', emoji: '🧠', label: 'Generating insights...' },
 ];
 
-export function ScanModal({ isOpen, onCancel, repoUrl, scanMode }: ScanModalProps) {
+export function ScanModal({ isOpen, onCancel, repoUrl }: ScanModalProps) {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  
-  // Simulate progress - in reality, backend doesn't provide real-time updates
-  // We show a generic "scanning" state with all steps pending
-  const currentStep = 0; // Backend processes all at once, so we just show loading
+  const [currentStep, setCurrentStep] = useState(1);
+
+  // Simulate progress
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentStep(1);
+      const interval = setInterval(() => {
+        setCurrentStep(prev => prev < SCAN_STEPS.length ? prev + 1 : prev);
+      }, 8000);
+      return () => clearInterval(interval);
+    }
+  }, [isOpen]);
 
   const handleCancelClick = () => {
     setShowCancelConfirm(true);
@@ -51,92 +53,104 @@ export function ScanModal({ isOpen, onCancel, repoUrl, scanMode }: ScanModalProp
     onCancel();
   };
 
-  const getStepStatus = (index: number) => {
-    // Since backend doesn't provide real-time progress, show all as in-progress
-    if (index === 0) return 'in-progress';
-    return 'pending';
-  };
-
-  const getStepIcon = (status: string) => {
-    switch (status) {
-      case 'complete':
-        return <CheckCircle2 className="w-5 h-5 text-sage" />;
-      case 'in-progress':
-        return <Loader2 className="w-5 h-5 text-amber animate-spin" />;
-      default:
-        return <Circle className="w-5 h-5 text-warm-gray-400" />;
+  const getRepoName = () => {
+    try {
+      const url = new URL(repoUrl);
+      return url.pathname.slice(1);
+    } catch {
+      return repoUrl;
     }
   };
 
-  // Extract repo name from URL
-  const repoName = repoUrl.split('/').slice(-2).join('/');
+  const getStatusIcon = (index: number) => {
+    if (index < currentStep - 1) return '✅';
+    if (index === currentStep - 1) return '⏳';
+    return '⏺️';
+  };
 
   return (
     <>
       <Dialog open={isOpen} onOpenChange={() => {}}>
         <DialogContent 
-          className="bg-navy text-cream border-none sm:max-w-md"
+          className="bg-cream border-4 border-navy shadow-craft-lg p-8 max-w-lg [&>button]:hidden"
           onPointerDownOutside={(e) => e.preventDefault()}
           onEscapeKeyDown={(e) => e.preventDefault()}
         >
-          <DialogHeader>
-            <DialogTitle className="font-headline text-2xl font-bold uppercase tracking-wide text-cream">
-              Scanning Repository
-            </DialogTitle>
-            <DialogDescription className="text-warm-gray-400">
-              <span className="font-mono text-sm">{repoName}</span>
-              <span className="ml-2 text-xs uppercase">({scanMode} scan)</span>
-            </DialogDescription>
-          </DialogHeader>
+          <div className="text-center mb-8">
+            <h2 className="font-headline text-2xl font-black uppercase tracking-tight text-navy mb-2">
+              Scanning Your Repository
+            </h2>
+            <p className="text-navy/60 italic">
+              Estimated time: 30-60 seconds
+            </p>
+          </div>
 
-          <div className="py-6 space-y-3">
+          <div className="space-y-1">
             {SCAN_STEPS.map((step, index) => {
-              const status = getStepStatus(index);
+              const isActive = index === currentStep - 1;
+              const isComplete = index < currentStep - 1;
+              const isPending = index > currentStep - 1;
+              
               return (
                 <div
                   key={step.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                    status === 'in-progress' 
-                      ? 'bg-amber/10 border border-amber/30' 
-                      : 'bg-transparent'
+                  className={`py-3 px-4 -mx-4 border-b border-navy/10 ${
+                    isActive ? 'bg-amber/10 border-b-2 border-amber' : ''
                   }`}
                 >
-                  {getStepIcon(status)}
-                  <span className={`text-sm ${
-                    status === 'in-progress' 
-                      ? 'text-cream font-medium' 
-                      : 'text-warm-gray-400'
-                  }`}>
-                    {step.label}
-                  </span>
+                  <div className="flex items-start gap-4">
+                    <span className="text-2xl w-8 flex-shrink-0">
+                      {getStatusIcon(index)}
+                    </span>
+                    <div className="flex-1">
+                      <p className={`font-medium ${isPending ? 'text-navy/40' : 'text-navy'}`}>
+                        <span className="mr-2">{step.emoji}</span>
+                        {step.label}
+                      </p>
+                      {index === 0 && (isActive || isComplete) && (
+                        <p className="text-sm text-navy/50 font-mono mt-1">
+                          {getRepoName()}
+                        </p>
+                      )}
+                      {index === 1 && isActive && (
+                        <p className="text-sm text-navy/50 font-mono mt-1">
+                          ESLint analyzing files
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               );
             })}
           </div>
 
-          <div className="flex justify-center pt-2">
-            <Button
-              variant="outline"
+          <div className="mt-8 text-center">
+            <button
               onClick={handleCancelClick}
-              className="border-warm-gray-600 text-warm-gray-400 hover:bg-warm-gray-800 hover:text-cream"
+              className="text-navy/60 hover:text-navy uppercase tracking-widest text-sm font-medium transition-colors"
             >
               Cancel Scan
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>
 
       <AlertDialog open={showCancelConfirm} onOpenChange={setShowCancelConfirm}>
-        <AlertDialogContent className="bg-card border-border">
+        <AlertDialogContent className="bg-cream border-4 border-navy">
           <AlertDialogHeader>
             <AlertDialogTitle className="font-headline uppercase">Cancel Scan?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will stop the current scan. You can start a new scan at any time.
+              Are you sure you want to cancel? You can start a new scan anytime.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Continue Scanning</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmCancel} className="bg-destructive text-destructive-foreground">
+            <AlertDialogCancel className="border-2 border-navy/20">
+              Continue Scanning
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleConfirmCancel}
+              className="bg-navy text-cream hover:bg-navy/90"
+            >
               Yes, Cancel
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -48,11 +48,9 @@ const Index = () => {
   // Show results view after successful scan
   if (scanState === 'success' && result) {
     return (
-      <div className="min-h-screen">
+      <div className="wireframe-container">
         <Header onLogoClick={handleNewScan} />
-        <main className="container mx-auto px-4 py-8">
-          <ScanResults report={result} onNewScan={handleNewScan} />
-        </main>
+        <ScanResults report={result} onNewScan={handleNewScan} />
         <Footer />
       </div>
     );
@@ -60,7 +58,7 @@ const Index = () => {
 
   // Show landing page with scan form
   return (
-    <div className="min-h-screen">
+    <div className="wireframe-container">
       <Header />
       <main>
         <HeroSection

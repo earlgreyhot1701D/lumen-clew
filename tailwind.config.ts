@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -57,26 +62,20 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Lumen Clew custom colors
-        navy: "hsl(var(--navy))",
-        amber: "hsl(var(--amber))",
-        cream: "hsl(var(--cream))",
-        sage: "hsl(var(--sage))",
-        "warm-gray": {
-          100: "hsl(var(--warm-gray-100))",
-          200: "hsl(var(--warm-gray-200))",
-          300: "hsl(var(--warm-gray-300))",
-          400: "hsl(var(--warm-gray-400))",
-          500: "hsl(var(--warm-gray-500))",
-          600: "hsl(var(--warm-gray-600))",
-          700: "hsl(var(--warm-gray-700))",
-          800: "hsl(var(--warm-gray-800))",
-        },
+        navy: "#1a2332",
+        amber: "#d4a03c",
+        cream: "#f5f1e8",
+        sage: "#8b9a7d",
+        "warm-gray": "#e5e0d8",
+      },
+      borderWidth: {
+        "3": "3px",
+        "4": "4px",
       },
       fontFamily: {
-        headline: ['"Roboto Condensed"', 'sans-serif'],
-        sans: ['"Source Sans Pro"', 'sans-serif'],
-        mono: ['"Courier New"', 'monospace'],
+        headline: ["Roboto Condensed", "sans-serif"],
+        sans: ["Source Sans Pro", "sans-serif"],
+        mono: ["Roboto Mono", "monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -84,9 +83,9 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        craft: "0 2px 8px hsla(var(--navy), 0.08)",
-        "craft-lg": "0 4px 16px hsla(var(--navy), 0.12)",
-        "amber-glow": "0 0 20px hsla(var(--amber), 0.3)",
+        craft: "4px 4px 0 rgba(26, 35, 50, 0.15)",
+        "craft-lg": "8px 8px 0 rgba(26, 35, 50, 0.15)",
+        "amber-glow": "0 0 20px rgba(212, 160, 60, 0.3)",
       },
       keyframes: {
         "accordion-down": {
@@ -97,15 +96,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "pulse-amber": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.6" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "pulse-amber": "pulse-amber 1.5s ease-in-out infinite",
       },
     },
   },
