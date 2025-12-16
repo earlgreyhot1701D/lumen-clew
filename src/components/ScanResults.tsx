@@ -359,6 +359,30 @@ export function ScanResults({ report, onNewScan, previewMode = false }: ScanResu
           </div>
         </div>
       </div>
+
+      {/* No Supported Files Found - shows when repo has no JS/TS files */}
+      {report && report.scanScope.filesScanned === 0 && (
+        <div className="max-w-5xl mx-auto px-6 mb-8">
+          <div className="bg-amber/20 border-2 border-amber p-6 flex items-start gap-4 shadow-sm">
+            <span className="text-4xl opacity-90" aria-hidden="true">⚠️</span>
+            <div>
+              <h3 className="font-headline font-bold text-navy text-lg mb-2">No Supported Files Found</h3>
+              <p className="text-navy/80 text-sm mb-3">
+                Lumen Clew currently scans <strong>JavaScript and TypeScript</strong> projects only.
+              </p>
+              <p className="text-navy/80 text-sm mb-4">
+                Your scanned repository didn't contain any .js, .jsx, .ts, or .tsx files.
+                Try scanning a JavaScript or TypeScript project instead.
+              </p>
+              <div className="bg-white/50 p-3 rounded border border-amber/30 mt-4">
+                <p className="text-navy/70 text-xs italic">
+                  <strong>Coming Soon:</strong> Python, Go, Ruby, and other languages.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Results Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto px-6 mb-12">
