@@ -72,6 +72,7 @@ const Index = () => {
           <HowItWorks />
           <WhatWeCheck />
           <ScopeSection />
+          <ScanResults previewMode onNewScan={handleNewScan} />
           <HelpSection />
         </main>
         <Footer />

@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { ScanReport, TranslatedFinding } from '@/lib/types';
 
 interface ScanResultsProps {
-  report: ScanReport;
+  report?: ScanReport;
   onNewScan: () => void;
+  previewMode?: boolean;
 }
 
 const PANEL_CONFIG = {
@@ -11,25 +12,50 @@ const PANEL_CONFIG = {
     emoji: '🔍', 
     title: 'Code Quality', 
     tool: 'ESLint',
-    reflection: "What's your maintenance timeline?"
+    reflection: "What's your maintenance timeline?",
+    previewContent: [
+      'Code style consistency',
+      'Potential bugs and errors',
+      'Complexity and maintainability',
+      'Unused variables and imports',
+      'Best practice patterns'
+    ]
   },
   dependencies: { 
     emoji: '📦', 
     title: 'Dependency Health', 
     tool: 'npm audit',
-    reflection: 'Is this project going to production soon?'
+    reflection: 'Is this project going to production soon?',
+    previewContent: [
+      'Known security vulnerabilities',
+      'Outdated dependencies',
+      'High/critical severity issues',
+      'Recommended update paths'
+    ]
   },
   secrets: { 
     emoji: '🗝️', 
     title: 'Secrets & Config', 
     tool: 'Patterns',
-    reflection: 'Is this repo public or private?'
+    reflection: 'Is this repo public or private?',
+    previewContent: [
+      'Exposed API keys and tokens',
+      'Hardcoded credentials',
+      '.env file patterns',
+      'Sensitive configuration data'
+    ]
   },
   accessibility: { 
     emoji: '♿', 
     title: 'Accessibility', 
     tool: 'AI Scan',
-    reflection: 'Who are your users?'
+    reflection: 'Who are your users?',
+    previewContent: [
+      'Missing alt text on images',
+      'ARIA label issues',
+      'Non-semantic HTML elements',
+      'Screen reader compatibility'
+    ]
   },
 };
 
@@ -66,6 +92,38 @@ function FindingCard({ finding }: { finding: TranslatedFinding }) {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+function PreviewPanel({ panelKey }: { panelKey: string }) {
+  const config = PANEL_CONFIG[panelKey as keyof typeof PANEL_CONFIG];
+  if (!config) return null;
+  
+  return (
+    <div className="bg-cream p-5 border-3 border-navy/10 shadow-craft hover:shadow-craft-lg hover:-translate-y-1 hover:border-amber transition-all">
+      <div className="flex justify-between items-center mb-4 pb-3 border-b border-navy/10">
+        <h3 className="font-headline font-bold text-navy text-xl flex items-center gap-2">
+          <span className="text-2xl opacity-70" aria-hidden="true">{config.emoji}</span> {config.title}
+        </h3>
+        <span className="text-xs font-headline uppercase tracking-wide text-navy/60">{config.tool}</span>
+      </div>
+      
+      <div className="bg-white p-4 border border-navy/10">
+        <p className="font-bold text-navy mb-3">We'll analyze your code for:</p>
+        <ul className="space-y-2">
+          {config.previewContent.map((item, idx) => (
+            <li key={idx} className="flex items-start gap-2 text-navy/80">
+              <span className="text-amber mt-0.5">•</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      <p className="text-sm italic text-navy/60 mt-5 pt-4 border-t border-dashed border-navy/10">
+        Reflection: {config.reflection}
+      </p>
     </div>
   );
 }
@@ -123,15 +181,21 @@ function Panel({
   );
 }
 
-export function ScanResults({ report, onNewScan }: ScanResultsProps) {
+export function ScanResults({ report, onNewScan, previewMode = false }: ScanResultsProps) {
+  const scrollToForm = () => {
+    document.getElementById('scan-form')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <main id="results-section" className="bg-white pb-12 relative z-10" aria-labelledby="results-heading">
+    <section id="results-section" className="bg-white pb-12 relative z-10" aria-labelledby="results-heading">
       {/* Navy Banner */}
       <div className="bg-navy py-8 px-8 border-y-4 border-amber mb-12 shadow-craft relative overflow-hidden">
         <div aria-hidden="true" className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcmaWxsPSIjZTZhNjQxIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjMiIGN5PSIzIiByPSIxIi8+PGNpcmNsZSBjeD0iMTMiIGN5PSIxMyIgcj0iMSIvPjwvZz48L3N2Zz4=')]"></div>
         <div className="relative z-10 flex items-center justify-center gap-6">
           <div className="h-2 w-16 bg-amber hidden md:block shadow-sm" aria-hidden="true"></div>
-          <h2 id="results-heading" className="text-4xl md:text-5xl text-amber text-center uppercase tracking-tight font-headline font-black shadow-sm">Your Scan Results</h2>
+          <h2 id="results-heading" className="text-4xl md:text-5xl text-amber text-center uppercase tracking-tight font-headline font-black shadow-sm">
+            {previewMode ? "What You'll See" : 'Your Scan Results'}
+          </h2>
           <div className="h-2 w-16 bg-amber hidden md:block shadow-sm" aria-hidden="true"></div>
         </div>
       </div>
@@ -141,18 +205,36 @@ export function ScanResults({ report, onNewScan }: ScanResultsProps) {
         <div className="bg-amber/10 border-l-4 border-amber p-5 flex items-start gap-4 shadow-sm hover:shadow-md transition-all">
           <span className="text-3xl" aria-hidden="true">ℹ️</span>
           <div>
-            <h3 className="font-headline font-bold text-navy text-lg mb-1">Understanding Your Results</h3>
-            <p className="text-navy/80 text-sm leading-relaxed">We translate findings from standard tools. <strong>This is awareness, not direction.</strong> Use your context to make decisions.</p>
+            <h3 className="font-headline font-bold text-navy text-lg mb-1">
+              {previewMode ? 'How We Present Findings' : 'Understanding Your Results'}
+            </h3>
+            <p className="text-navy/80 text-sm leading-relaxed">
+              {previewMode 
+                ? 'We translate technical tool output into plain language. Each finding includes context, common approaches, and a reflection question to help you decide what matters for your project.'
+                : <>We translate findings from standard tools. <strong>This is awareness, not direction.</strong> Use your context to make decisions.</>
+              }
+            </p>
           </div>
         </div>
       </div>
       
       {/* Results Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto px-6 mb-12">
-        <Panel panelKey="code_quality" findings={report.panels.codeQuality.findings} />
-        <Panel panelKey="dependencies" findings={report.panels.dependencies.findings} />
-        <Panel panelKey="secrets" findings={report.panels.secrets.findings} />
-        <Panel panelKey="accessibility" findings={report.panels.accessibility.findings} />
+        {previewMode ? (
+          <>
+            <PreviewPanel panelKey="code_quality" />
+            <PreviewPanel panelKey="dependencies" />
+            <PreviewPanel panelKey="secrets" />
+            <PreviewPanel panelKey="accessibility" />
+          </>
+        ) : report ? (
+          <>
+            <Panel panelKey="code_quality" findings={report.panels.codeQuality.findings} />
+            <Panel panelKey="dependencies" findings={report.panels.dependencies.findings} />
+            <Panel panelKey="secrets" findings={report.panels.secrets.findings} />
+            <Panel panelKey="accessibility" findings={report.panels.accessibility.findings} />
+          </>
+        ) : null}
       </div>
       
       {/* Roadmap */}
@@ -181,18 +263,20 @@ export function ScanResults({ report, onNewScan }: ScanResultsProps) {
       {/* Actions */}
       <div className="px-12 flex flex-col items-center gap-5 mt-10">
         <button
-          onClick={onNewScan}
+          onClick={previewMode ? scrollToForm : onNewScan}
           className="bg-amber text-navy font-headline text-xl font-bold px-10 py-4 hover:bg-amber/90 transition shadow-craft hover:shadow-craft-lg hover:-translate-y-1 flex items-center gap-3 uppercase tracking-wider border-3 border-amber focus:ring-2 focus:ring-offset-2 focus:ring-navy"
         >
-          <span aria-hidden="true">🚀</span> Run Another Scan
+          <span aria-hidden="true">🚀</span> {previewMode ? 'Scan My Code' : 'Run Another Scan'}
         </button>
-        <a 
-          href="#" 
-          className="text-navy/70 font-bold hover:text-amber border-b-2 border-transparent hover:border-amber pb-1 transition-all flex items-center gap-2 font-headline uppercase tracking-wide text-sm focus:text-navy focus:border-navy"
-        >
-          <span aria-hidden="true">⬇️</span> Download Report (Markdown)
-        </a>
+        {!previewMode && (
+          <a 
+            href="#" 
+            className="text-navy/70 font-bold hover:text-amber border-b-2 border-transparent hover:border-amber pb-1 transition-all flex items-center gap-2 font-headline uppercase tracking-wide text-sm focus:text-navy focus:border-navy"
+          >
+            <span aria-hidden="true">⬇️</span> Download Report (Markdown)
+          </a>
+        )}
       </div>
-    </main>
+    </section>
   );
 }
