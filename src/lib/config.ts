@@ -1,10 +1,18 @@
 // Lumen Clew - Configuration Constants
 // Matches BACKEND_INTEGRATION_SPEC exactly
 
+// API URL with environment variable support
+export const API_BASE_URL = 
+  import.meta.env.VITE_API_URL || 'https://lumen-clew-backend.onrender.com';
+
+export const ENDPOINTS = {
+  scan: `${API_BASE_URL}/api/scan`,
+} as const;
+
 export const CONFIG = {
-  // API
-  API_BASE_URL: 'https://lumen-clew-backend.onrender.com',
-  API_SCAN_ENDPOINT: 'https://lumen-clew-backend.onrender.com/api/scan',
+  // API (legacy - use ENDPOINTS instead)
+  API_BASE_URL,
+  API_SCAN_ENDPOINT: ENDPOINTS.scan,
 
   // Claude
   CLAUDE_MODEL: 'claude-sonnet-4-5-20250929',
