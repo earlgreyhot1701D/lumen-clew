@@ -88,7 +88,7 @@ const Index = () => {
     <div className="p-4 md:p-8">
       <div className="wireframe-container">
         <Header />
-        <main>
+        <main id="main-content">
           <HeroSection
             onSubmit={handleStartScan}
             isLoading={scanState === 'scanning'}
