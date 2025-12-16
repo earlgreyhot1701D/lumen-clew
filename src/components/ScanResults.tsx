@@ -34,38 +34,39 @@ const PANEL_CONFIG = {
 };
 
 const IMPORTANCE_COLORS: Record<string, string> = {
-  important: 'bg-red-100 text-red-800 border-red-200',
-  explore: 'bg-amber-100 text-amber-800 border-amber-200',
-  note: 'bg-blue-100 text-blue-800 border-blue-200',
-  fyi: 'bg-gray-100 text-gray-600 border-gray-200',
+  important: 'bg-red-100 text-red-800 border border-red-200',
+  explore: 'bg-amber text-navy',
+  note: 'bg-blue-100 text-blue-800 border border-blue-200',
+  fyi: 'bg-gray-100 text-gray-600 border border-gray-200',
 };
 
 function FindingCard({ finding }: { finding: TranslatedFinding }) {
   const [isOpen, setIsOpen] = useState(false);
   
   return (
-    <details 
-      className="bg-white border-2 border-navy/10"
-      open={isOpen}
-      onClick={(e) => {
-        e.preventDefault();
-        setIsOpen(!isOpen);
-      }}
+    <div 
+      className="bg-white p-4 border border-navy/10 cursor-pointer hover:border-amber transition hover:shadow-craft hover:-translate-y-1"
+      tabIndex={0}
+      onClick={() => setIsOpen(!isOpen)}
+      onKeyDown={(e) => e.key === 'Enter' && setIsOpen(!isOpen)}
     >
-      <summary className="flex items-center gap-3 p-3 cursor-pointer list-none">
-        <span className={`transition-transform ${isOpen ? 'rotate-90' : ''}`}>▸</span>
-        <span className="flex-1 text-navy">{finding.plainLanguage}</span>
-        <span className={`text-xs px-2 py-1 border uppercase tracking-wider ${IMPORTANCE_COLORS[finding.importance] || IMPORTANCE_COLORS.fyi}`}>
+      <div className="flex items-center justify-between">
+        <span className="font-semibold text-navy">
+          <span className={`transition-transform inline-block ${isOpen ? 'rotate-90' : ''}`}>▸</span> {finding.plainLanguage}
+        </span>
+        <span className={`text-xs px-2 py-0.5 uppercase font-bold tracking-wider ${IMPORTANCE_COLORS[finding.importance] || IMPORTANCE_COLORS.fyi}`}>
           {finding.importance}
         </span>
-      </summary>
-      <div className="px-3 pb-3 text-sm text-navy/70 space-y-2">
-        {finding.context && <p>{finding.context}</p>}
-        {finding.commonApproaches && (
-          <p><strong>Common approaches:</strong> {finding.commonApproaches}</p>
-        )}
       </div>
-    </details>
+      {isOpen && (
+        <div className="mt-3 pt-3 border-t border-navy/10 text-sm text-navy/70 space-y-2">
+          {finding.context && <p>{finding.context}</p>}
+          {finding.commonApproaches && (
+            <p><strong>Common approaches:</strong> {finding.commonApproaches}</p>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -79,137 +80,119 @@ function Panel({
   const config = PANEL_CONFIG[panelKey as keyof typeof PANEL_CONFIG];
   if (!config) return null;
   const hasFindings = findings.length > 0;
+  const isAccessibility = panelKey === 'accessibility';
   
   return (
-    <div className="craftsman-card p-6">
-      <div className="flex items-center gap-3 mb-4 pb-4 border-b-2 border-navy/10">
-        <span className="text-2xl">{config.emoji}</span>
-        <h3 className="flex-1 font-headline font-bold uppercase tracking-wide text-navy">
-          {config.title}
+    <div className="bg-cream p-5 border-3 border-navy/10 shadow-craft hover:shadow-craft-lg hover:-translate-y-1 hover:border-amber transition-all">
+      <div className="flex justify-between items-center mb-4 pb-3 border-b border-navy/10">
+        <h3 className="font-headline font-bold text-navy text-xl flex items-center gap-2">
+          <span className="text-2xl opacity-70" aria-hidden="true">{config.emoji}</span> {config.title}
         </h3>
-        <span className="text-xs text-navy/40 uppercase tracking-wider">
-          {config.tool}
-        </span>
+        <span className="text-xs font-headline uppercase tracking-wide text-navy/60">{config.tool}</span>
       </div>
       
       {hasFindings ? (
-        <>
-          <p className="text-sm text-navy/60 mb-4">
-            Issues found: {findings.length}
-          </p>
-          <div className="space-y-2 mb-4">
-            {findings.map((finding, idx) => (
-              <FindingCard key={idx} finding={finding} />
-            ))}
-          </div>
-        </>
+        <div className="space-y-3">
+          <p className="font-bold text-navy mb-3">Issues found: {findings.length}</p>
+          {findings.map((finding, idx) => (
+            <FindingCard key={idx} finding={finding} />
+          ))}
+          
+          {isAccessibility && (
+            <div className="text-sm text-navy/70 bg-amber/10 p-3 border-l-4 border-amber flex gap-2 items-start leading-tight mt-4">
+              <span aria-hidden="true">⚠️</span> Note: This is a static analysis. For contrast/keyboard checks, use Lighthouse.
+            </div>
+          )}
+        </div>
       ) : (
-        <div className="text-center py-6">
-          <span className="text-3xl mb-2 block">✅</span>
-          <p className="text-green-700 font-medium">No issues found</p>
+        <div className="bg-white p-6 border-2 border-green-200/50 text-green-900 text-center min-h-[180px] flex flex-col items-center justify-center gap-3">
+          <span className="text-5xl opacity-90" aria-hidden="true">✅</span>
+          <p className="text-xl font-headline font-bold">No patterns detected.</p>
+          <p className="text-sm text-green-800/80 max-w-xs leading-relaxed">
+            {panelKey === 'secrets' 
+              ? "Great! We didn't find any obvious API keys, tokens, or credentials."
+              : "No issues found in this category."}
+          </p>
         </div>
       )}
       
-      <div className="mt-4 pt-4 border-t-2 border-dashed border-navy/10">
-        <p className="text-sm text-navy/50 italic">
-          Reflection: {config.reflection}
-        </p>
-      </div>
+      <p className="text-sm italic text-navy/60 mt-5 pt-4 border-t border-dashed border-navy/10">
+        Reflection: {config.reflection}
+      </p>
     </div>
   );
 }
 
 export function ScanResults({ report, onNewScan }: ScanResultsProps) {
-  const getRepoName = () => {
-    try {
-      const url = new URL(report.repoUrl);
-      return url.pathname.slice(1);
-    } catch {
-      return report.repoUrl;
-    }
-  };
-
   return (
-    <div>
+    <main id="results-section" className="bg-white pb-12 relative z-10" aria-labelledby="results-heading">
       {/* Navy Banner */}
-      <div className="bg-navy py-12">
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-center gap-4">
-            <div className="h-px bg-amber/30 flex-1 max-w-24" />
-            <h1 className="font-headline text-4xl md:text-5xl font-black uppercase tracking-tight text-amber text-center">
-              Your Scan Results
-            </h1>
-            <div className="h-px bg-amber/30 flex-1 max-w-24" />
-          </div>
+      <div className="bg-navy py-8 px-8 border-y-4 border-amber mb-12 shadow-craft relative overflow-hidden">
+        <div aria-hidden="true" className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcmaWxsPSIjZTZhNjQxIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjMiIGN5PSIzIiByPSIxIi8+PGNpcmNsZSBjeD0iMTMiIGN5PSIxMyIgcj0iMSIvPjwvZz48L3N2Zz4=')]"></div>
+        <div className="relative z-10 flex items-center justify-center gap-6">
+          <div className="h-2 w-16 bg-amber hidden md:block shadow-sm" aria-hidden="true"></div>
+          <h2 id="results-heading" className="text-4xl md:text-5xl text-amber text-center uppercase tracking-tight font-headline font-black shadow-sm">Your Scan Results</h2>
+          <div className="h-2 w-16 bg-amber hidden md:block shadow-sm" aria-hidden="true"></div>
         </div>
       </div>
-      
+
       {/* Info Callout */}
-      <div className="bg-cream py-8">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto bg-white border-l-4 border-amber p-6">
-            <div className="flex items-start gap-4">
-              <span className="text-2xl">ℹ️</span>
-              <div>
-                <h2 className="font-headline font-bold uppercase tracking-wide text-navy mb-2">
-                  Understanding Your Results
-                </h2>
-                <p className="text-navy/70">
-                  We translate findings from standard tools. <strong>This is awareness, not direction.</strong> Use your context to make decisions.
-                </p>
-              </div>
-            </div>
+      <div className="max-w-5xl mx-auto px-6 mb-8">
+        <div className="bg-amber/10 border-l-4 border-amber p-5 flex items-start gap-4 shadow-sm hover:shadow-md transition-all">
+          <span className="text-3xl" aria-hidden="true">ℹ️</span>
+          <div>
+            <h3 className="font-headline font-bold text-navy text-lg mb-1">Understanding Your Results</h3>
+            <p className="text-navy/80 text-sm leading-relaxed">We translate findings from standard tools. <strong>This is awareness, not direction.</strong> Use your context to make decisions.</p>
           </div>
         </div>
       </div>
       
       {/* Results Grid */}
-      <div className="bg-cream py-8">
-        <div className="container mx-auto px-6">
-          <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
-            <Panel panelKey="code_quality" findings={report.panels.codeQuality.findings} />
-            <Panel panelKey="dependencies" findings={report.panels.dependencies.findings} />
-            <Panel panelKey="secrets" findings={report.panels.secrets.findings} />
-            <Panel panelKey="accessibility" findings={report.panels.accessibility.findings} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto px-6 mb-12">
+        <Panel panelKey="code_quality" findings={report.panels.codeQuality.findings} />
+        <Panel panelKey="dependencies" findings={report.panels.dependencies.findings} />
+        <Panel panelKey="secrets" findings={report.panels.secrets.findings} />
+        <Panel panelKey="accessibility" findings={report.panels.accessibility.findings} />
+      </div>
+      
+      {/* Roadmap */}
+      <div className="max-w-6xl mx-auto px-6 py-6 bg-sage/10 border-3 border-sage/30">
+        <h4 className="mb-4 font-headline font-bold text-navy/50 uppercase tracking-widest text-center">Roadmap: Coming Soon</h4>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 opacity-60 grayscale-[30%] cursor-not-allowed text-center" aria-label="Future features list">
+          <div className="bg-white p-5 border-3 border-dashed border-sage/40 flex flex-col items-center gap-3 shadow-sm">
+            <span className="text-4xl opacity-40 text-sage" aria-hidden="true">🏗️</span>
+            <h4 className="font-bold text-navy text-lg">CI/Test Hygiene</h4>
           </div>
-          
-          {/* Roadmap */}
-          <div className="max-w-5xl mx-auto mt-12">
-            <h3 className="font-headline font-bold uppercase tracking-wide text-navy/40 text-center mb-6">
-              Roadmap: Coming Soon
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-navy/30">
-              <div className="p-4 border-2 border-dashed border-navy/10">
-                🐍 Python Support
-              </div>
-              <div className="p-4 border-2 border-dashed border-navy/10">
-                📊 Trend Analysis
-              </div>
-              <div className="p-4 border-2 border-dashed border-navy/10">
-                🔗 CI Integration
-              </div>
-              <div className="p-4 border-2 border-dashed border-navy/10">
-                📁 Private Repos
-              </div>
-            </div>
+          <div className="bg-white p-5 border-3 border-dashed border-sage/40 flex flex-col items-center gap-3 shadow-sm">
+            <span className="text-4xl opacity-40 text-sage" aria-hidden="true">🔦</span>
+            <h4 className="font-bold text-navy text-lg">Full A11y</h4>
           </div>
-          
-          {/* Actions */}
-          <div className="max-w-5xl mx-auto mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={onNewScan}
-              className="px-8 py-4 bg-amber text-navy font-headline font-bold uppercase tracking-wide hover:bg-amber/90 transition-colors shadow-craft"
-            >
-              🚀 Run Another Scan
-            </button>
-            <button
-              className="px-8 py-4 border-3 border-navy/20 text-navy/60 font-headline font-bold uppercase tracking-wide hover:border-navy/40 transition-colors"
-            >
-              ⬇ Download Report (Markdown)
-            </button>
+          <div className="bg-white p-5 border-3 border-dashed border-sage/40 flex flex-col items-center gap-3 shadow-sm">
+            <span className="text-4xl opacity-40 text-sage" aria-hidden="true">⚡</span>
+            <h4 className="font-bold text-navy text-lg">Performance</h4>
+          </div>
+          <div className="bg-white p-5 border-3 border-dashed border-sage/40 flex flex-col items-center gap-3 shadow-sm">
+            <span className="text-4xl opacity-40 text-sage" aria-hidden="true">⚖️</span>
+            <h4 className="font-bold text-navy text-lg">Bundle Size</h4>
           </div>
         </div>
       </div>
-    </div>
+      
+      {/* Actions */}
+      <div className="px-12 flex flex-col items-center gap-5 mt-10">
+        <button
+          onClick={onNewScan}
+          className="bg-amber text-navy font-headline text-xl font-bold px-10 py-4 hover:bg-amber/90 transition shadow-craft hover:shadow-craft-lg hover:-translate-y-1 flex items-center gap-3 uppercase tracking-wider border-3 border-amber focus:ring-2 focus:ring-offset-2 focus:ring-navy"
+        >
+          <span aria-hidden="true">🚀</span> Run Another Scan
+        </button>
+        <a 
+          href="#" 
+          className="text-navy/70 font-bold hover:text-amber border-b-2 border-transparent hover:border-amber pb-1 transition-all flex items-center gap-2 font-headline uppercase tracking-wide text-sm focus:text-navy focus:border-navy"
+        >
+          <span aria-hidden="true">⬇️</span> Download Report (Markdown)
+        </a>
+      </div>
+    </main>
   );
 }

@@ -48,37 +48,41 @@ const Index = () => {
   // Show results view after successful scan
   if (scanState === 'success' && result) {
     return (
-      <div className="wireframe-container">
-        <Header onLogoClick={handleNewScan} />
-        <ScanResults report={result} onNewScan={handleNewScan} />
-        <Footer />
+      <div className="p-4 md:p-8">
+        <div className="wireframe-container">
+          <Header onLogoClick={handleNewScan} />
+          <ScanResults report={result} onNewScan={handleNewScan} />
+          <Footer />
+        </div>
       </div>
     );
   }
 
   // Show landing page with scan form
   return (
-    <div className="wireframe-container">
-      <Header />
-      <main>
-        <HeroSection
-          onSubmit={handleStartScan}
-          isLoading={scanState === 'scanning'}
-          rateLimit={rateLimit}
-        />
-        <HowItWorks />
-        <WhatWeCheck />
-        <ScopeSection />
-        <HelpSection />
-      </main>
-      <Footer />
+    <div className="p-4 md:p-8">
+      <div className="wireframe-container">
+        <Header />
+        <main>
+          <HeroSection
+            onSubmit={handleStartScan}
+            isLoading={scanState === 'scanning'}
+            rateLimit={rateLimit}
+          />
+          <HowItWorks />
+          <WhatWeCheck />
+          <ScopeSection />
+          <HelpSection />
+        </main>
+        <Footer />
 
-      <ScanModal
-        isOpen={scanState === 'scanning'}
-        onCancel={handleCancelScan}
-        repoUrl={currentScanUrl}
-        scanMode={currentScanMode}
-      />
+        <ScanModal
+          isOpen={scanState === 'scanning'}
+          onCancel={handleCancelScan}
+          repoUrl={currentScanUrl}
+          scanMode={currentScanMode}
+        />
+      </div>
     </div>
   );
 };

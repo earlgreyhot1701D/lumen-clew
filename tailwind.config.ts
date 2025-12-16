@@ -63,9 +63,9 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         navy: "#1a2332",
-        amber: "#d4a03c",
+        amber: "#e6a641",
         cream: "#f5f1e8",
-        sage: "#8b9a7d",
+        sage: "#8da399",
         "warm-gray": "#e5e0d8",
       },
       borderWidth: {
@@ -73,9 +73,9 @@ export default {
         "4": "4px",
       },
       fontFamily: {
-        headline: ["Roboto Condensed", "sans-serif"],
-        sans: ["Source Sans Pro", "sans-serif"],
-        mono: ["Roboto Mono", "monospace"],
+        headline: ["Roboto Condensed", "Arial Narrow", "Impact", "sans-serif"],
+        sans: ["Source Sans Pro", "Segoe UI", "Helvetica Neue", "sans-serif"],
+        mono: ["Courier New", "monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -83,9 +83,9 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        craft: "4px 4px 0 rgba(26, 35, 50, 0.15)",
-        "craft-lg": "8px 8px 0 rgba(26, 35, 50, 0.15)",
-        "amber-glow": "0 0 20px rgba(212, 160, 60, 0.3)",
+        craft: "4px 4px 0px 0px rgba(26, 35, 50, 0.1)",
+        "craft-lg": "8px 8px 0px 0px rgba(26, 35, 50, 0.1)",
+        "amber-glow": "0 0 15px rgba(230, 166, 65, 0.3)",
       },
       keyframes: {
         "accordion-down": {

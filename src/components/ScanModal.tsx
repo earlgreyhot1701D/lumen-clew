@@ -72,20 +72,20 @@ export function ScanModal({ isOpen, onCancel, repoUrl }: ScanModalProps) {
     <>
       <Dialog open={isOpen} onOpenChange={() => {}}>
         <DialogContent 
-          className="bg-cream border-4 border-navy shadow-craft-lg p-8 max-w-lg [&>button]:hidden"
+          className="bg-cream w-[600px] max-w-full p-8 border-4 border-navy shadow-craft-lg [&>button]:hidden"
           onPointerDownOutside={(e) => e.preventDefault()}
           onEscapeKeyDown={(e) => e.preventDefault()}
         >
-          <div className="text-center mb-8">
-            <h2 className="font-headline text-2xl font-black uppercase tracking-tight text-navy mb-2">
+          <div className="text-center mb-2">
+            <h2 className="font-headline text-3xl font-bold text-navy uppercase tracking-wide mb-2">
               Scanning Your Repository
             </h2>
-            <p className="text-navy/60 italic">
+            <p className="text-navy/60 text-lg italic">
               Estimated time: 30-60 seconds
             </p>
           </div>
 
-          <div className="space-y-1">
+          <div className="bg-white border-3 border-navy/10 p-6 space-y-4 mt-6">
             {SCAN_STEPS.map((step, index) => {
               const isActive = index === currentStep - 1;
               const isComplete = index < currentStep - 1;
@@ -94,15 +94,19 @@ export function ScanModal({ isOpen, onCancel, repoUrl }: ScanModalProps) {
               return (
                 <div
                   key={step.id}
-                  className={`py-3 px-4 -mx-4 border-b border-navy/10 ${
-                    isActive ? 'bg-amber/10 border-b-2 border-amber' : ''
+                  className={`flex items-start justify-between py-2 ${
+                    isComplete ? 'opacity-70 border-b border-navy/5' : ''
+                  } ${
+                    isActive ? 'py-4 bg-amber/10 -mx-4 px-4 border-b-2 border-amber' : ''
+                  } ${
+                    isPending ? 'opacity-40' : ''
                   }`}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center gap-4">
                     <span className="text-2xl w-8 flex-shrink-0">
                       {getStatusIcon(index)}
                     </span>
-                    <div className="flex-1">
+                    <div>
                       <p className={`font-medium ${isPending ? 'text-navy/40' : 'text-navy'}`}>
                         <span className="mr-2">{step.emoji}</span>
                         {step.label}
@@ -127,7 +131,7 @@ export function ScanModal({ isOpen, onCancel, repoUrl }: ScanModalProps) {
           <div className="mt-8 text-center">
             <button
               onClick={handleCancelClick}
-              className="text-navy/60 hover:text-navy uppercase tracking-widest text-sm font-medium transition-colors"
+              className="text-navy/50 font-bold text-sm hover:text-navy transition uppercase tracking-widest border-b-2 border-transparent hover:border-navy pb-1 font-headline"
             >
               Cancel Scan
             </button>
