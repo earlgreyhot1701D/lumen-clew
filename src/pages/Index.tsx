@@ -1,12 +1,86 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { useScan } from '@/hooks/useScan';
+import { useToast } from '@/hooks/use-toast';
+import { Header } from '@/components/Header';
+import { HeroSection } from '@/components/HeroSection';
+import { HowItWorks } from '@/components/HowItWorks';
+import { WhatWeCheck } from '@/components/WhatWeCheck';
+import { ScopeSection } from '@/components/ScopeSection';
+import { HelpSection } from '@/components/HelpSection';
+import { Footer } from '@/components/Footer';
+import { ScanModal } from '@/components/ScanModal';
+import { ScanResults } from '@/components/ScanResults';
 
 const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+  const { scanState, result, error, rateLimit, startScan, resetScan } = useScan();
+  const { toast } = useToast();
+  const [currentScanUrl, setCurrentScanUrl] = useState('');
+  const [currentScanMode, setCurrentScanMode] = useState<'fast' | 'full'>('fast');
+
+  const handleStartScan = async (repoUrl: string, scanMode: 'fast' | 'full') => {
+    setCurrentScanUrl(repoUrl);
+    setCurrentScanMode(scanMode);
+    await startScan(repoUrl, scanMode);
+  };
+
+  const handleCancelScan = () => {
+    resetScan();
+    toast({
+      title: 'Scan cancelled',
+      description: 'You can start a new scan at any time.',
+    });
+  };
+
+  const handleNewScan = () => {
+    resetScan();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Show error toast when error state changes
+  if (error && scanState === 'error') {
+    toast({
+      variant: 'destructive',
+      title: 'Scan failed',
+      description: error,
+    });
+  }
+
+  // Show results view after successful scan
+  if (scanState === 'success' && result) {
+    return (
+      <div className="min-h-screen">
+        <Header onLogoClick={handleNewScan} />
+        <main className="container mx-auto px-4 py-8">
+          <ScanResults report={result} onNewScan={handleNewScan} />
+        </main>
+        <Footer />
       </div>
+    );
+  }
+
+  // Show landing page with scan form
+  return (
+    <div className="min-h-screen">
+      <Header />
+      <main>
+        <HeroSection
+          onSubmit={handleStartScan}
+          isLoading={scanState === 'scanning'}
+          rateLimit={rateLimit}
+        />
+        <HowItWorks />
+        <WhatWeCheck />
+        <ScopeSection />
+        <HelpSection />
+      </main>
+      <Footer />
+
+      <ScanModal
+        isOpen={scanState === 'scanning'}
+        onCancel={handleCancelScan}
+        repoUrl={currentScanUrl}
+        scanMode={currentScanMode}
+      />
     </div>
   );
 };
