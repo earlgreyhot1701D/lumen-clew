@@ -260,23 +260,23 @@ export function ScanResults({ report, onNewScan, previewMode = false }: ScanResu
         </div>
       </div>
       
-      {/* Actions */}
-      <div className="px-12 flex flex-col items-center gap-5 mt-10">
-        <button
-          onClick={previewMode ? scrollToForm : onNewScan}
-          className="bg-amber text-navy font-headline text-xl font-bold px-10 py-4 hover:bg-amber/90 transition shadow-craft hover:shadow-craft-lg hover:-translate-y-1 flex items-center gap-3 uppercase tracking-wider border-3 border-amber focus:ring-2 focus:ring-offset-2 focus:ring-navy"
-        >
-          <span aria-hidden="true">🚀</span> {previewMode ? 'Scan My Code' : 'Run Another Scan'}
-        </button>
-        {!previewMode && (
+      {/* Actions - only show for real results */}
+      {!previewMode && (
+        <div className="px-12 flex flex-col items-center gap-5 mt-10">
+          <button
+            onClick={onNewScan}
+            className="bg-amber text-navy font-headline text-xl font-bold px-10 py-4 hover:bg-amber/90 transition shadow-craft hover:shadow-craft-lg hover:-translate-y-1 flex items-center gap-3 uppercase tracking-wider border-3 border-amber focus:ring-2 focus:ring-offset-2 focus:ring-navy"
+          >
+            <span aria-hidden="true">🚀</span> Run Another Scan
+          </button>
           <a 
             href="#" 
             className="text-navy/70 font-bold hover:text-amber border-b-2 border-transparent hover:border-amber pb-1 transition-all flex items-center gap-2 font-headline uppercase tracking-wide text-sm focus:text-navy focus:border-navy"
           >
             <span aria-hidden="true">⬇️</span> Download Report (Markdown)
           </a>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }
