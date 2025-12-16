@@ -7,8 +7,15 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createHash } from 'crypto';
 import { CONFIG } from '../lib/config';
-import { logger } from '../lib/logger';
 import { RawFinding } from '../lib/types';
+
+// Inline Node.js-compatible logger (no Vite dependencies)
+const logger = {
+  debug: (msg: string, data?: unknown) => process.env.DEBUG && console.debug(`[Secrets] ${msg}`, data ?? ''),
+  info: (msg: string, data?: unknown) => console.info(`[Secrets] ${msg}`, data ?? ''),
+  warn: (msg: string, data?: unknown) => console.warn(`[Secrets] ${msg}`, data ?? ''),
+  error: (msg: string, data?: unknown) => console.error(`[Secrets] ${msg}`, data ?? ''),
+};
 
 // BACKEND: SecretsResult interface
 export interface SecretsResult {
