@@ -194,7 +194,7 @@ function FindingCard({ finding, repoUrl }: { finding: TranslatedFinding; repoUrl
       </div>
       {/* Location & GitHub Link */}
       {finding.file && (
-        <div className="mt-2 flex items-center gap-3 text-xs">
+        <div className="mt-2 flex items-center flex-wrap gap-3 text-xs">
           <span className="font-mono text-navy/60">
             📍 {finding.file}{finding.line ? `:${finding.line}` : ''}
           </span>
