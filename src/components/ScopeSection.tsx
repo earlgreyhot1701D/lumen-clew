@@ -1,6 +1,6 @@
 export function ScopeSection() {
   return (
-    <section aria-labelledby="scope-heading" className="py-8 px-8 bg-cream text-center border-y-4 border-navy/10">
+    <section id="scope-heading" aria-labelledby="scope-heading" className="py-8 px-8 bg-cream text-center border-y-4 border-navy/10">
       <details className="max-w-2xl mx-auto cursor-pointer group inline-block">
         <summary className="font-headline font-bold text-lg text-navy/60 hover:text-navy transition flex items-center justify-center gap-2 focus:text-navy">
           <span className="text-amber text-xl group-open:rotate-90 transition-transform duration-200 font-sans" aria-hidden="true">▸</span>

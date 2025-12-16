@@ -303,7 +303,7 @@ function Panel({
           
           {isAccessibility && (
             <div className="text-sm text-navy/70 bg-amber/10 p-3 border-l-4 border-amber flex gap-2 items-start leading-tight mt-4">
-              <span aria-hidden="true">⚠️</span> Note: This is a static analysis. For contrast/keyboard checks, use Lighthouse.
+              <span aria-hidden="true">⚠️</span> Note: This is a static analysis. For contrast/keyboard checks, use <a href="https://developer.chrome.com/docs/lighthouse" target="_blank" rel="noopener noreferrer" className="font-bold text-navy hover:underline">Lighthouse</a>.
             </div>
           )}
         </div>
