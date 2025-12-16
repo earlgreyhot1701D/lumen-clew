@@ -8,8 +8,15 @@ import { createHash } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CONFIG } from '../lib/config';
-import { logger } from '../lib/logger';
 import { RawFinding } from '../lib/types';
+
+// Inline Node.js-compatible logger (no Vite dependencies)
+const logger = {
+  debug: (msg: string, data?: unknown) => process.env.DEBUG && console.debug(`[NpmAudit] ${msg}`, data ?? ''),
+  info: (msg: string, data?: unknown) => console.info(`[NpmAudit] ${msg}`, data ?? ''),
+  warn: (msg: string, data?: unknown) => console.warn(`[NpmAudit] ${msg}`, data ?? ''),
+  error: (msg: string, data?: unknown) => console.error(`[NpmAudit] ${msg}`, data ?? ''),
+};
 
 // BACKEND: NpmAuditResult interface
 export interface NpmAuditResult {

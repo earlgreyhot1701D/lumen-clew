@@ -6,8 +6,15 @@
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
 import { CONFIG } from '../lib/config';
-import { logger } from '../lib/logger';
 import { RawFinding } from '../lib/types';
+
+// Inline Node.js-compatible logger (no Vite dependencies)
+const logger = {
+  debug: (msg: string, data?: unknown) => process.env.DEBUG && console.debug(`[ESLint] ${msg}`, data ?? ''),
+  info: (msg: string, data?: unknown) => console.info(`[ESLint] ${msg}`, data ?? ''),
+  warn: (msg: string, data?: unknown) => console.warn(`[ESLint] ${msg}`, data ?? ''),
+  error: (msg: string, data?: unknown) => console.error(`[ESLint] ${msg}`, data ?? ''),
+};
 
 // ESLint JSON output structure
 interface ESLintMessage {
@@ -64,7 +71,7 @@ export function runESLint(
   tempDir: string,
   timeoutMs: number = CONFIG.FAST_SCAN.eslintTimeoutMs
 ): ESLintResult {
-  const endTimer = logger.time('runESLint');
+  const startTime = Date.now();
 
   try {
     logger.info(`Running ESLint on ${tempDir}`);
@@ -87,7 +94,6 @@ export function runESLint(
         output = execError.stdout;
       } else if (execError.killed) {
         logger.error('ESLint timeout exceeded', { timeoutMs });
-        endTimer();
         return {
           success: true,
           findings: [],
@@ -95,7 +101,6 @@ export function runESLint(
         };
       } else {
         logger.error('ESLint execution failed', { error: execError.message });
-        endTimer();
         return {
           success: true,
           findings: [],
@@ -110,7 +115,6 @@ export function runESLint(
       eslintResults = JSON.parse(output);
     } catch (parseError) {
       logger.error('Failed to parse ESLint output', { output: output.substring(0, 200) });
-      endTimer();
       return {
         success: true,
         findings: [],
@@ -152,8 +156,8 @@ export function runESLint(
       }
     }
 
-    logger.info(`ESLint completed: ${findings.length} findings (${totalIssueCount} total issues, capped at ${CONFIG.MAX_FINDINGS_PER_PANEL})`);
-    endTimer();
+    const duration = Date.now() - startTime;
+    logger.info(`ESLint completed in ${duration}ms: ${findings.length} findings (${totalIssueCount} total issues, capped at ${CONFIG.MAX_FINDINGS_PER_PANEL})`);
 
     return {
       success: true,
@@ -162,7 +166,6 @@ export function runESLint(
     };
   } catch (error: any) {
     logger.error('Unexpected error in runESLint', { error: error.message });
-    endTimer();
     return {
       success: true,
       findings: [],

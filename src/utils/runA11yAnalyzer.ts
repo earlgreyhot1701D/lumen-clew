@@ -9,7 +9,14 @@ import * as path from 'path';
 import * as crypto from 'crypto';
 import { CONFIG } from '../lib/config';
 import { RawFinding } from '../lib/types';
-import { logger } from '../lib/logger';
+
+// Inline Node.js-compatible logger (no Vite dependencies)
+const logger = {
+  debug: (msg: string, data?: unknown) => process.env.DEBUG && console.debug(`[A11y] ${msg}`, data ?? ''),
+  info: (msg: string, data?: unknown) => console.info(`[A11y] ${msg}`, data ?? ''),
+  warn: (msg: string, data?: unknown) => console.warn(`[A11y] ${msg}`, data ?? ''),
+  error: (msg: string, data?: unknown) => console.error(`[A11y] ${msg}`, data ?? ''),
+};
 
 export interface A11yResult {
   success: boolean;
