@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Copy } from 'lucide-react';
+import { toast } from 'sonner';
 import { ScanReport, TranslatedFinding } from '@/lib/types';
 import { generateGitHubFileLink } from '@/lib/githubLinks';
 
@@ -196,6 +198,19 @@ function FindingCard({ finding, repoUrl }: { finding: TranslatedFinding; repoUrl
           <span className="font-mono text-navy/60">
             📍 {finding.file}{finding.line ? `:${finding.line}` : ''}
           </span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const pathToCopy = finding.file + (finding.line ? `:${finding.line}` : '');
+              navigator.clipboard.writeText(pathToCopy).then(() => {
+                toast.success('Path copied to clipboard');
+              });
+            }}
+            className="text-navy/40 hover:text-navy/70 transition-colors"
+            title="Copy path"
+          >
+            <Copy size={14} />
+          </button>
           {githubLink && (
             <a
               href={githubLink}
