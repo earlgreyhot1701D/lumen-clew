@@ -24,6 +24,10 @@ export interface TranslatedFinding {
   importance: 'fyi' | 'note' | 'explore' | 'important';
   reflection: string;
   staticAnalysisNote?: string;
+  // Location data (preserved from raw findings)
+  file?: string;
+  line?: number;
+  column?: number;
 }
 
 // Panel translation result (from Claude translator)
